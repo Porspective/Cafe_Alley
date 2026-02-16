@@ -134,7 +134,7 @@
         
         // Asset Filenames
         const LOGO_NAV_TEXT = "cafe%20alleylogo.png";
-        const CAT_MASCOT = "cat_only_precise.png"; // Using your precise PNG file
+        const CAT_MASCOT = "cat_only_precise.png"; // Using the correct precise PNG file
         const BRICK_TEXTURE = "brick.jpg";
         const HERO_IMAGE = "sam.jpg";
 
@@ -259,11 +259,11 @@
                     <nav className="bg-black border-b-4 border-yellow-500 sticky top-0 z-50 px-4 py-2 shadow-2xl relative">
                         <div className="max-w-7xl mx-auto flex items-center justify-between h-20">
                             <div className="flex items-center gap-2 cursor-pointer h-full" onClick={() => setActiveTab('home')}>
-                                {/* Logo Cat - Sits on top of the bottom line of the header */}
+                                {/* Logo Cat - Raised by 9/12ths (75%) from the previous 50% down position = -25% offset */}
                                 <img 
                                     src={CAT_MASCOT} 
                                     alt="Cafe Alley Icon" 
-                                    className="h-40 w-auto object-contain translate-y-[50%]" 
+                                    className="h-40 w-auto object-contain translate-y-[-25%]" 
                                 />
                                 <div className="flex flex-col -ml-1 text-white">
                                     <span className="text-2xl font-black tracking-tighter uppercase italic leading-none">Café Alley</span>
@@ -486,7 +486,7 @@
                                                         <div className="flex justify-between text-slate-400 text-sm font-bold uppercase tracking-widest font-sans"><span>Ardmore Sales Tax</span><span>${(cartTotal * 0.085).toFixed(2)}</span></div>
                                                         <div className="flex justify-between text-3xl font-black text-white pt-6 border-t border-white/10 mt-2 font-serif">
                                                             <span className="uppercase italic tracking-tighter">Total Amount</span>
-                                                            <span className="text-yellow-500 underline underline-offset-8 decoration-yellow-500/20">${(cartTotal * 1.085).toFixed(2)}</span>
+                                                            <span className="text-yellow-500 underline underline-offset-8 decoration-yellow-500/20 font-sans">${(cartTotal * 1.085).toFixed(2)}</span>
                                                         </div>
                                                     </div>
                                                     <div className="space-y-8 pt-4 font-sans">
@@ -512,8 +512,8 @@
                     </main>
 
                     <footer className="bg-black border-t-4 border-yellow-500 pt-32 pb-10 px-4 mt-32 relative overflow-visible shadow-2xl">
-                        {/* Footer Cat - Sits right on top of the footer border */}
-                        <MascotCat className="top-0 left-1/2 -translate-x-1/2 -translate-y-[100%]" footer={true} />
+                        {/* Footer Cat - sitting right above the footer border, moved down 1/3 image height (-100% -> -67%) */}
+                        <MascotCat className="top-0 left-1/2 -translate-x-1/2 -translate-y-[67%]" footer={true} />
                         
                         <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12 relative z-10 text-white font-sans">
                             <div>
