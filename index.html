@@ -134,22 +134,22 @@
         
         // Asset Filenames
         const LOGO_NAV_TEXT = "cafe%20alleylogo.png";
-        const CAT_MASCOT = "cat_only_precise.png"; 
+        const CAT_MASCOT = "cafe_alley_just_cat.png"; // Fixed to use the PNG version for transparency
         const BRICK_TEXTURE = "brick.jpg";
         const HERO_IMAGE = "sam.jpg";
 
-        // Gallery Items reordered to put #10 next to #8
+        // Gallery Items with Layout Config
         const GALLERY_ITEMS = [
-            { src: "cafe%20alley%20fav1.png", className: "md:col-span-2 md:row-span-2" },
-            { src: "cafe%20alley%20fav2.png", className: "md:row-span-2" },
-            { src: "cafe%20alley%20fav3.png", className: "" },
-            { src: "cafe%20alley%20fav4.png", className: "" },
-            { src: "cafe%20alley%20fav5.png", className: "md:col-span-2", objectPosition: "top" }, // Top align Fav 5
-            { src: "cafe%20alley%20fav6.png", className: "md:col-span-2 md:row-span-2" },
-            { src: "cafe%20alley%20fav7.png", className: "" },
-            { src: "cafe%20alley%20fav8.png", className: "md:row-span-2" },
-            { src: "cafe%20alley%20fav10.png", className: "" }, // Fav 10 moved next to 8
-            { src: "cafe%20alley%20fav9.png", className: "md:col-span-2" }
+            { src: "cafe%20alley%20fav1.jpg", className: "md:col-span-2 md:row-span-2" },
+            { src: "cafe%20alley%20fav2.jpg", className: "md:row-span-2" },
+            { src: "cafe%20alley%20fav3.jpg", className: "" },
+            { src: "cafe%20alley%20fav4.jpg", className: "" },
+            { src: "cafe%20alley%20fav5.jpg", className: "md:col-span-2", objectPosition: "top" },
+            { src: "cafe%20alley%20fav6.jpg", className: "md:col-span-2 md:row-span-2" },
+            { src: "cafe%20alley%20fav7.jpg", className: "" },
+            { src: "cafe%20alley%20fav8.jpg", className: "md:row-span-2" },
+            { src: "cafe%20alley%20fav10.jpg", className: "" }, // Placed next to 8
+            { src: "cafe%20alley%20fav9.jpg", className: "md:col-span-2" }
         ];
 
         const MENU_DATA = [
@@ -210,9 +210,8 @@
                     src={CAT_MASCOT} 
                     alt="Mascot Cat" 
                     className={`${footer ? 'h-40 md:h-72' : headerMascot ? 'h-32 md:h-44' : 'h-16 md:h-20'} w-auto drop-shadow-[0_-5px_15px_rgba(0,0,0,0.8)]`}
-                    style={{ 
-                        mixBlendMode: 'normal'
-                    }}
+                    style={{ mixBlendMode: 'normal' }}
+                    onError={(e) => { e.target.style.display = 'none'; }}
                 />
             </div>
         );
@@ -261,11 +260,12 @@
                     <nav className="bg-black border-b-4 border-yellow-500 sticky top-0 z-50 px-4 py-2 shadow-2xl relative">
                         <div className="max-w-7xl mx-auto flex items-center justify-between h-20">
                             <div className="flex items-center gap-2 cursor-pointer h-full" onClick={() => setActiveTab('home')}>
-                                {/* Logo cat mascot - Lowered significantly to overlapping position (40% down) */}
+                                {/* Header Cat - Sits right on the bottom line of the header */}
                                 <img 
                                     src={CAT_MASCOT} 
                                     alt="Cafe Alley Icon" 
-                                    className="h-40 w-auto object-contain translate-y-[40%]" 
+                                    className="h-40 w-auto object-contain translate-y-[35%]" 
+                                    onError={(e) => { e.target.src = "cafe_alley_just_cat.png"; }}
                                 />
                                 <div className="flex flex-col -ml-1 text-white">
                                     <span className="text-2xl font-black tracking-tighter uppercase italic leading-none">Café Alley</span>
@@ -273,10 +273,10 @@
                                 </div>
                             </div>
 
-                            <div className="hidden md:flex items-center gap-8 font-sans">
-                                <button onClick={() => setActiveTab('home')} className={`text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'home' ? 'text-yellow-500 underline underline-offset-8 decoration-2' : 'text-white hover:text-yellow-500'}`}>Home</button>
-                                <button onClick={() => setActiveTab('menu')} className={`text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'menu' ? 'text-yellow-500 underline underline-offset-8 decoration-2' : 'text-white hover:text-yellow-500'}`}>Menu</button>
-                                <button onClick={() => setActiveTab('order')} className={`text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'order' ? 'text-yellow-500 underline underline-offset-8 decoration-2' : 'text-white hover:text-yellow-500'}`}>Order Online</button>
+                            <div className="hidden md:flex items-center gap-8 font-sans text-white">
+                                <button onClick={() => setActiveTab('home')} className={`text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'home' ? 'text-yellow-500 underline underline-offset-8 decoration-2' : 'hover:text-yellow-500'}`}>Home</button>
+                                <button onClick={() => setActiveTab('menu')} className={`text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'menu' ? 'text-yellow-500 underline underline-offset-8 decoration-2' : 'hover:text-yellow-500'}`}>Menu</button>
+                                <button onClick={() => setActiveTab('order')} className={`text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'order' ? 'text-yellow-500 underline underline-offset-8 decoration-2' : 'hover:text-yellow-500'}`}>Order Online</button>
                                 <button onClick={() => setActiveTab('cart')} className="bg-yellow-500 text-black px-5 py-2 rounded-sm font-black flex items-center gap-2 transition-all shadow-lg active:scale-95">
                                     <Icon name="ShoppingBag" size={18} />
                                     <span>{cartCount}</span>
@@ -311,7 +311,7 @@
                                     </div>
                                 </div>
 
-                                {/* Dynamic Image Gallery Section */}
+                                {/* Image Gallery Section */}
                                 <div className="mt-32">
                                     <div className="text-center mb-12">
                                         <h2 className="text-4xl md:text-6xl font-black text-white uppercase italic tracking-tighter">Our Favorites</h2>
@@ -388,7 +388,7 @@
                             <div className="py-12 px-4 flex flex-col lg:flex-row gap-8">
                                 <div className="lg:w-64 space-y-3">
                                     <div className="bg-black/90 p-6 mb-6 rounded-2xl border border-yellow-500/30 shadow-xl text-center">
-                                        <img src={CAT_MASCOT} alt="Order Cat" className="h-20 mx-auto mb-4" />
+                                        <img src={CAT_MASCOT} alt="Order Cat" className="h-20 mx-auto mb-4" onError={(e) => { e.target.src = "cafe_alley_just_cat.png"; }} />
                                         <p className="text-[10px] font-black text-yellow-500 tracking-widest uppercase font-sans">Direct Pickup Only</p>
                                     </div>
                                     <div className="flex lg:flex-col gap-2 overflow-x-auto pb-4 lg:pb-0 no-scrollbar">
@@ -413,7 +413,7 @@
                                         </div>
                                     ))}
                                 </div>
-                                <div className="lg:w-80 bg-black/95 border border-yellow-500/20 p-6 h-fit sticky top-28 rounded-3xl shadow-2xl backdrop-blur-xl">
+                                <div className="lg:w-80 bg-black/95 border border-yellow-500/20 p-6 h-fit sticky top-28 rounded-3xl shadow-2xl backdrop-blur-xl text-white">
                                     <h3 className="text-xl font-black uppercase tracking-widest mb-6 border-b-2 border-yellow-500 pb-2 italic font-serif">Current Order</h3>
                                     {cart.length === 0 ? (
                                         <div className="py-16 text-center opacity-40">
@@ -451,7 +451,7 @@
                         )}
 
                         {activeTab === 'cart' && (
-                            <div className="py-20 px-4 max-w-2xl mx-auto">
+                            <div className="py-20 px-4 max-w-2xl mx-auto text-white">
                                 <div className="bg-black/95 p-8 border-t-8 border-yellow-500 shadow-2xl rounded-b-3xl relative font-sans">
                                     {orderComplete ? (
                                         <div className="text-center py-16 animate-in fade-in duration-1000 font-serif">
@@ -514,8 +514,8 @@
                     </main>
 
                     <footer className="bg-black border-t-4 border-yellow-500 pt-32 pb-10 px-4 mt-32 relative overflow-visible shadow-2xl">
-                        {/* Mascot cat perched on footer border - Lowered significantly to translate-y-[50%] overlap */}
-                        <MascotCat className="top-0 left-1/2 -translate-x-1/2 -translate-y-[50%]" footer={true} />
+                        {/* Footer Cat - Sits right above the footer border */}
+                        <MascotCat className="top-0 left-1/2 -translate-x-1/2 -translate-y-[100%]" footer={true} />
                         
                         <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12 relative z-10 text-white font-sans">
                             <div>
@@ -524,7 +524,7 @@
                                     <img src={LOGO_NAV_TEXT} alt="Footer Logo" className="h-full w-auto object-contain" />
                                     <h2 className="text-2xl font-black uppercase italic tracking-tighter leading-none font-serif">Café Alley</h2>
                                 </div>
-                                <p className="text-slate-500 text-sm leading-relaxed font-sans mb-8 italic opacity-80">"A Main Street staple in historic downtown Ardmore. Dedicated to fine food, scratch-made desserts, and classic Southern hospitality since 1986."</p>
+                                <p className="text-slate-400 text-sm leading-relaxed mb-8 italic opacity-80 font-sans">"A Main Street staple in historic downtown Ardmore. Dedicated to fine food, scratch-made desserts, and classic Southern hospitality since 1986."</p>
                                 <div className="flex gap-6">
                                     <div className="text-slate-400 hover:text-yellow-500 transition-all transform hover:scale-110 cursor-pointer"><Icon name="Facebook" size={24}/></div>
                                     <div className="text-slate-400 hover:text-yellow-500 transition-all transform hover:scale-110 cursor-pointer"><Icon name="Instagram" size={24}/></div>
@@ -532,15 +532,15 @@
                             </div>
                             <div>
                                 <h4 className="font-black uppercase tracking-[0.4em] text-[10px] text-yellow-500 mb-8 uppercase font-sans">Location</h4>
-                                <div className="flex gap-4 text-slate-400 text-sm font-sans mb-6 italic"><Icon name="MapPin" className="text-yellow-500 shrink-0" size={20}/><span>115 West Main St.<br/>Ardmore, OK 73401</span></div>
-                                <div className="flex gap-4 text-slate-400 text-sm italic group cursor-pointer text-white"><Icon name="Phone" className="text-yellow-500 shrink-0" size={20}/><span>(580) 223-2233</span></div>
+                                <div className="flex gap-4 text-slate-400 text-sm mb-6 italic font-sans"><Icon name="MapPin" className="text-yellow-500 shrink-0" size={20}/><span>115 West Main St.<br/>Ardmore, OK 73401</span></div>
+                                <div className="flex gap-4 text-slate-400 text-sm italic group cursor-pointer text-white font-sans"><Icon name="Phone" className="text-yellow-500 shrink-0" size={20}/><span>(580) 223-2233</span></div>
                             </div>
                             <div>
                                 <h4 className="font-black uppercase tracking-[0.4em] text-[10px] text-yellow-500 mb-8 uppercase tracking-widest font-sans">Kitchen Hours</h4>
-                                <ul className="text-slate-400 text-sm font-sans space-y-3 italic text-xs">
+                                <ul className="text-slate-400 text-sm space-y-3 italic text-xs">
                                     <li className="flex justify-between border-b border-white/5 pb-2 opacity-30"><span>Monday</span> <span className="font-bold">Closed</span></li>
-                                    <li className="flex justify-between border-b border-white/5 pb-2"><span>Tue - Thu</span> <span className="text-white font-bold">11am - 9pm</span></li>
-                                    <li className="flex justify-between border-b border-white/5 pb-2"><span>Fri - Sat</span> <span className="text-white font-bold">11am - 10pm</span></li>
+                                    <li className="flex justify-between border-b border-white/5 pb-2"><span>Tue - Thu</span> <span className="text-white font-bold font-sans">11am - 9pm</span></li>
+                                    <li className="flex justify-between border-b border-white/5 pb-2"><span>Fri - Sat</span> <span className="text-white font-bold font-sans">11am - 10pm</span></li>
                                     <li className="flex justify-between opacity-30"><span>Sunday</span> <span className="font-bold text-white">Closed</span></li>
                                 </ul>
                             </div>
