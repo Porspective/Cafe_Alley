@@ -1,0 +1,474 @@
+import React, { useState, useMemo } from 'react';
+import { 
+  ShoppingBag, 
+  Menu as MenuIcon, 
+  X, 
+  Instagram, 
+  Facebook, 
+  MapPin, 
+  Phone, 
+  Clock, 
+  Plus, 
+  Minus, 
+  Trash2, 
+  Utensils, 
+  Info, 
+  ExternalLink,
+  ChevronRight
+} from 'lucide-react';
+
+// Actual filenames from your uploads
+const LOGO_FULL = "cafe_alley_no_background.jpg";
+const CAT_ONLY = "cafe_alley_just_cat.jpg";
+const BRICK_TEXTURE = "image_53107e.jpg";
+
+const MENU_DATA = [
+  {
+    category: "Starters",
+    items: [
+      { id: 's1', name: "Stuffed Poblano", price: 9.00, description: "Jumbo poblano stuffed with pulled chicken, cheese, bell pepper & onions, breaded & flash-fried with chipotle sour cream." },
+      { id: 's2', name: "Dip Trio", price: 10.00, description: "House made pimento cheese served with fresh salsa, guacamole and warm tortilla chips." },
+      { id: 's3', name: "Calamari", price: 11.00, description: "Lightly dusted & flash-fried then drizzled with aioli & served with marinara." },
+      { id: 's4', name: "Queso", price: 8.00, description: "Mexican cheese with spicy sausage served with homemade salsa & tortilla chips." },
+      { id: 's5', name: "Fried Green Beans", price: 8.00, description: "Lightly battered & golden-fried. Served with wasabi ranch dressing." }
+    ]
+  },
+  {
+    category: "From the Grill",
+    items: [
+      { id: 'g1', name: "Prime New York Strip", price: 32.00, description: "14 oz. steak, lightly seasoned & grilled to your preferred temperature." },
+      { id: 'g2', name: "Rib Eye Steak", price: 29.00, description: "A very tender, flavorful steak grilled to your liking." },
+      { id: 'g3', name: "Filet", price: 27.00, description: "6 oz. center-cut USDA Choice filet." },
+      { id: 'g4', name: "Mustard Crusted Pork Chop", price: 19.00, description: "Prime pork chop grilled & topped with sweet apple onion compote. Choice of two sides." },
+      { id: 'g5', name: "Short-Smoked Salmon", price: 22.00, description: "Marinated, quickly smoked & finished on the grill with sweet remoulade. Choice of two sides." }
+    ]
+  },
+  {
+    category: "Specialities",
+    items: [
+      { id: 'sp1', name: "Chicken Fried Steak", price: 15.00, description: "Hand-breaded sirloin, golden-fried & topped with jalapeno gravy. Two sides." },
+      { id: 'sp2', name: "Pollo Pancetta", price: 16.00, description: "Diced chicken, cracked black pepper, pancetta, mushrooms, garlic, Alfredo & penne." },
+      { id: 'sp3', name: "Blackened Tilapia", price: 19.00, description: "Cajun seasoned tilapia topped with housemade guacamole & choice of two sides." },
+      { id: 'sp4', name: "Chicken Parmesan", price: 15.00, description: "Hand-breaded chicken breast with homemade marinara, mozzarella, and linguine." },
+      { id: 'sp5', name: "Fish Tacos", price: 14.00, description: "Two grilled tilapia tacos with tomatoes, red cabbage & sweet remoulade." }
+    ]
+  },
+  {
+    category: "Burgers",
+    items: [
+      { id: 'b1', name: "The Southern Favourite", price: 11.00, description: "House pimento cheese, bacon, fried green tomato, lettuce, onion & pickle on brioche. With fries." },
+      { id: 'b2', name: "Alley Burger", price: 11.00, description: "Bacon, Tillamook Cheddar, mayo & a fried egg on a pretzel bun. With fries." },
+      { id: 'b3', name: "Maytag Blue Cheese Burger", price: 12.00, description: "Maytag blue cheese & bacon on a pretzel bun. With fries." },
+      { id: 'b4', name: "California Burger", price: 11.00, description: "Lettuce, tomato, sprouts, guacamole & Jack cheese on brioche. With fries." },
+      { id: 'b5', name: "Old-Fashioned Cheese Burger", price: 9.00, description: "Tillamook Cheddar, lettuce, tomato, onion & pickle. With fries." }
+    ]
+  },
+  {
+    category: "Signature Drinks",
+    items: [
+      { id: 'd1', name: "Alley Tea", price: 9.00, description: "Our signature mason jar drink! Vodka, rum, triple sec, gin, Chambord & pineapple juice." },
+      { id: 'd2', name: "Tito's Cranberry Mule", price: 10.00, description: "Tito's Vodka, ginger beer, cranberry juice & fresh lime." },
+      { id: 'd3', name: "Fiery Mule", price: 10.00, description: "Fireball Whiskey, ginger beer, splash of pineapple & lime." }
+    ]
+  }
+];
+
+// Mascot Cat component that sits on borders
+const MascotCat = ({ className = "" }) => (
+  <div className={`absolute z-[60] pointer-events-none select-none ${className}`}>
+    <img 
+      src={CAT_ONLY} 
+      alt="Mascot Cat" 
+      className="h-20 md:h-24 w-auto drop-shadow-[0_-5px_10px_rgba(0,0,0,0.7)]"
+      onError={(e) => { e.target.style.display = 'none'; }}
+    />
+  </div>
+);
+
+// Lightened the overlay so the bricks are more visible
+const BrickBackground = () => (
+  <div 
+    className="fixed inset-0 z-[-1]" 
+    style={{ 
+      backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${BRICK_TEXTURE}')`,
+      backgroundSize: '800px',
+      backgroundRepeat: 'repeat',
+      backgroundAttachment: 'fixed'
+    }}
+  />
+);
+
+const App = () => {
+  const [activeTab, setActiveTab] = useState('home');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [cart, setCart] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("Starters");
+  const [orderComplete, setOrderComplete] = useState(false);
+
+  const cartCount = useMemo(() => cart.reduce((acc, item) => acc + item.quantity, 0), [cart]);
+  const cartTotal = useMemo(() => cart.reduce((acc, item) => acc + (item.price * item.quantity), 0), [cart]);
+
+  const addToCart = (item) => {
+    setCart(prev => {
+      const exists = prev.find(i => i.id === item.id);
+      if (exists) {
+        return prev.map(i => i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i);
+      }
+      return [...prev, { ...item, quantity: 1 }];
+    });
+  };
+
+  const removeFromCart = (id) => setCart(prev => prev.filter(i => i.id !== id));
+  const updateQuantity = (id, delta) => {
+    setCart(prev => prev.map(i => i.id === id ? { ...i, quantity: Math.max(1, i.quantity + delta) } : i));
+  };
+
+  return (
+    <div className="min-h-screen text-slate-100 font-serif selection:bg-yellow-500/30">
+      <BrickBackground />
+      
+      {/* Navigation Bar */}
+      <nav className="bg-black/95 border-b-4 border-yellow-500 sticky top-0 z-50 px-4 py-2 shadow-2xl relative">
+        {/* Cat sitting on top edge of header, tail dipping in slightly */}
+        <MascotCat className="top-0 right-10 md:right-40 -translate-y-[70%]" />
+
+        <div className="max-w-7xl mx-auto flex items-center justify-between h-20">
+          <div className="flex items-center gap-2 cursor-pointer h-full" onClick={() => setActiveTab('home')}>
+            <img 
+              src={LOGO_FULL} 
+              alt="Cafe Alley Logo" 
+              className="h-full w-auto object-contain py-1"
+              onError={(e) => { e.target.style.display = 'none'; }} 
+            />
+            <div className="flex flex-col -ml-1">
+              <span className="text-2xl font-black text-white tracking-tighter uppercase italic leading-none">Café Alley</span>
+              <span className="text-[9px] tracking-[0.3em] text-yellow-500 uppercase font-bold">Downtown Ardmore</span>
+            </div>
+          </div>
+
+          <div className="hidden md:flex items-center gap-8">
+            <button onClick={() => setActiveTab('home')} className={`text-xs font-black uppercase tracking-widest transition-colors ${activeTab === 'home' ? 'text-yellow-500 underline underline-offset-4' : 'text-white hover:text-yellow-500'}`}>Home</button>
+            <button onClick={() => setActiveTab('menu')} className={`text-xs font-black uppercase tracking-widest transition-colors ${activeTab === 'menu' ? 'text-yellow-500 underline underline-offset-4' : 'text-white hover:text-yellow-500'}`}>Menu</button>
+            <button onClick={() => setActiveTab('order')} className={`text-xs font-black uppercase tracking-widest transition-colors ${activeTab === 'order' ? 'text-yellow-500 underline underline-offset-4' : 'text-white hover:text-yellow-500'}`}>Order Online</button>
+            <button 
+              onClick={() => setActiveTab('cart')}
+              className="bg-yellow-500 hover:bg-yellow-400 text-black px-4 py-2 rounded-sm font-black flex items-center gap-2 transition-all shadow-lg active:scale-95"
+            >
+              <ShoppingBag size={18} />
+              <span>{cartCount}</span>
+            </button>
+          </div>
+
+          <button className="md:hidden text-white p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? <X size={28} /> : <MenuIcon size={28} />}
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile Nav Overlay */}
+      {isMenuOpen && (
+        <div className="fixed inset-0 bg-black/98 z-[100] flex flex-col items-center justify-center gap-8 text-xl font-black uppercase tracking-widest animate-in fade-in duration-300">
+            <img src={LOGO_FULL} alt="Logo" className="h-32 mb-4" />
+            <button onClick={() => {setActiveTab('home'); setIsMenuOpen(false);}} className="hover:text-yellow-500 transition-colors">Home</button>
+            <button onClick={() => {setActiveTab('menu'); setIsMenuOpen(false);}} className="hover:text-yellow-500 transition-colors">Menu</button>
+            <button onClick={() => {setActiveTab('order'); setIsMenuOpen(false);}} className="hover:text-yellow-500 transition-colors">Order Online</button>
+            <button onClick={() => {setActiveTab('cart'); setIsMenuOpen(false);}} className="hover:text-yellow-500 text-yellow-500 border-2 border-yellow-500 px-6 py-2">Cart ({cartCount})</button>
+            <button onClick={() => setIsMenuOpen(false)} className="mt-8 text-slate-500"><X size={40}/></button>
+        </div>
+      )}
+
+      <main className="max-w-7xl mx-auto">
+        {activeTab === 'home' && (
+          <div className="px-4 py-12 md:py-24 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div className="bg-black/85 p-8 md:p-16 border-l-8 border-yellow-500 shadow-2xl backdrop-blur-md rounded-r-3xl">
+                <img src={LOGO_FULL} alt="Café Alley Logo Large" className="h-48 mb-8 block drop-shadow-2xl" />
+                <span className="text-yellow-500 font-bold uppercase tracking-[0.4em] mb-4 block mt-4">Since 1986</span>
+                <h1 className="text-5xl md:text-7xl font-black text-white mb-6 uppercase leading-none tracking-tighter italic">
+                  Ardmore's <br/> <span className="text-yellow-500">Signature</span> Spot
+                </h1>
+                <p className="text-lg text-slate-300 mb-10 leading-relaxed font-sans max-w-md italic">
+                  "A local tradition of fine steaks, specialty desserts, and classic cocktails in the heart of historic downtown."
+                </p>
+                <div className="flex flex-wrap gap-4">
+                  <button onClick={() => setActiveTab('order')} className="bg-yellow-500 hover:bg-yellow-400 text-black px-10 py-4 font-black uppercase tracking-widest transition-all rounded-sm shadow-xl">Start Order</button>
+                  <button onClick={() => setActiveTab('menu')} className="border-2 border-white hover:bg-white hover:text-black text-white px-10 py-4 font-black uppercase tracking-widest transition-all rounded-sm">View Menu</button>
+                </div>
+              </div>
+              <div className="hidden md:block relative">
+                <div className="absolute -inset-10 bg-yellow-500/10 blur-3xl rounded-full"></div>
+                <div className="relative border-8 border-black shadow-2xl transform rotate-2 overflow-hidden rounded-lg group">
+                  <img 
+                    src="https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&q=80&w=1200" 
+                    className="w-full h-[600px] object-cover transition-transform duration-700 group-hover:scale-105" 
+                    alt="Café Alley Atmosphere"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                  <div className="absolute bottom-8 left-8 right-8 text-center bg-yellow-500 p-4 text-black font-black uppercase tracking-widest italic shadow-lg">
+                    115 West Main St • Since 1986
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-32 bg-black/90 border-y-4 border-yellow-600 p-12 text-center rounded-3xl shadow-2xl">
+               <h2 className="text-yellow-500 text-xs font-black uppercase tracking-[0.5em] mb-4 text-center">Our Sister Location</h2>
+               <h3 className="text-4xl md:text-6xl font-black text-white uppercase italic mb-6">The Dew Drop Inn</h3>
+               <p className="max-w-xl mx-auto text-slate-400 font-sans mb-8 leading-relaxed italic text-lg">
+                 "Our casual sister location just down Main Street. Cold beer and friendly conversation."
+               </p>
+               <a href="#" className="inline-flex items-center gap-2 bg-white text-black px-10 py-3 font-black uppercase tracking-tighter hover:bg-yellow-500 transition-colors rounded-full shadow-lg">
+                 Visit the Inn <ExternalLink size={18}/>
+               </a>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'menu' && (
+          <div className="py-20 px-4 animate-in fade-in duration-500">
+            <div className="max-w-4xl mx-auto bg-[#fffdfa] text-black p-8 md:p-16 shadow-[0_0_80px_rgba(0,0,0,0.8)] relative border-x-8 border-black">
+              <div className="absolute top-4 left-4 right-4 bottom-4 border border-black/5 pointer-events-none"></div>
+              
+              <div className="text-center mb-16 relative">
+                <img src={LOGO_FULL} alt="Menu Logo" className="h-32 mx-auto mb-6" />
+                <h2 className="text-5xl font-black uppercase tracking-tighter italic">Café Alley</h2>
+                <div className="w-24 h-1 bg-yellow-500 mx-auto my-6"></div>
+                <p className="uppercase tracking-[0.3em] font-bold text-[10px] opacity-60 italic">Historic Downtown Ardmore • Since 1986</p>
+              </div>
+
+              {MENU_DATA.map(cat => (
+                <div key={cat.category} className="mb-20">
+                  <div className="flex items-center gap-4 mb-12">
+                    <div className="h-px bg-slate-200 flex-1"></div>
+                    <h3 className="text-2xl font-black uppercase tracking-widest text-slate-800">{cat.category}</h3>
+                    <div className="h-px bg-slate-200 flex-1"></div>
+                  </div>
+                  <div className="space-y-12">
+                    {cat.items.map(item => (
+                      <div key={item.id} className="group">
+                        <div className="flex justify-between items-baseline mb-2">
+                          <h4 className="text-xl font-bold uppercase tracking-tight group-hover:text-yellow-600 transition-colors">{item.name}</h4>
+                          <span className="flex-grow border-b border-dotted border-slate-300 mx-4"></span>
+                          <span className="font-bold font-sans text-lg">${item.price.toFixed(2)}</span>
+                        </div>
+                        <p className="text-slate-500 italic leading-relaxed text-sm font-sans md:max-w-2xl">{item.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'order' && (
+          <div className="py-12 px-4 flex flex-col lg:flex-row gap-8 animate-in fade-in duration-500">
+            <div className="lg:w-64 space-y-3">
+              <div className="bg-black/90 p-6 mb-6 rounded-2xl border border-yellow-500/30 shadow-xl text-center">
+                <img src={LOGO_FULL} alt="Logo" className="h-20 mx-auto mb-4" />
+                <p className="text-[10px] font-black text-yellow-500 tracking-widest uppercase">Direct Pickup</p>
+              </div>
+              <div className="flex lg:flex-col gap-2 overflow-x-auto pb-4 lg:pb-0 no-scrollbar">
+                {MENU_DATA.map(cat => (
+                  <button
+                    key={cat.category}
+                    onClick={() => setSelectedCategory(cat.category)}
+                    className={`whitespace-nowrap flex-shrink-0 text-left p-4 uppercase font-black tracking-widest text-[11px] border-r-4 transition-all ${
+                      selectedCategory === cat.category 
+                      ? 'bg-yellow-500 text-black border-black shadow-lg translate-x-1' 
+                      : 'bg-black/80 text-slate-400 border-transparent hover:text-white'
+                    }`}
+                  >
+                    {cat.category}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex-1 grid md:grid-cols-2 gap-4">
+              {MENU_DATA.find(c => c.category === selectedCategory).items.map(item => (
+                <div key={item.id} className="bg-black/90 border border-white/5 p-6 flex flex-col justify-between hover:border-yellow-500 transition-all rounded-2xl shadow-xl">
+                   <div>
+                    <div className="flex justify-between items-start mb-4">
+                      <h4 className="text-lg font-bold uppercase tracking-tight text-white group-hover:text-yellow-500">{item.name}</h4>
+                      <span className="text-yellow-500 font-sans font-black text-lg">${item.price.toFixed(2)}</span>
+                    </div>
+                    <p className="text-slate-400 text-xs font-sans mb-8 leading-relaxed italic opacity-80">{item.description}</p>
+                   </div>
+                   <button 
+                    onClick={() => addToCart(item)}
+                    className="w-full bg-white text-black py-4 font-black uppercase tracking-widest text-[11px] hover:bg-yellow-500 transition-all rounded-sm shadow-md"
+                   >
+                     Add to Bag
+                   </button>
+                </div>
+              ))}
+            </div>
+
+            <div className="lg:w-80 bg-black/95 border border-yellow-500/20 p-6 h-fit sticky top-28 rounded-3xl shadow-2xl backdrop-blur-xl">
+               <h3 className="text-xl font-black uppercase tracking-widest mb-6 border-b-2 border-yellow-500 pb-2 italic">Current Order</h3>
+               {cart.length === 0 ? (
+                 <div className="py-16 text-center opacity-40">
+                    <ShoppingBag className="mx-auto text-slate-500 mb-4" size={40} />
+                    <p className="text-slate-400 italic text-sm font-sans tracking-wide">Your bag is empty.</p>
+                 </div>
+               ) : (
+                 <div className="space-y-4">
+                   {cart.map(item => (
+                     <div key={item.id} className="flex flex-col gap-1 pb-4 border-b border-white/5">
+                        <div className="flex justify-between text-xs font-bold uppercase tracking-tight">
+                          <span className="truncate pr-4 font-black">{item.name}</span>
+                          <button onClick={() => removeFromCart(item.id)} className="text-red-500 hover:text-white transition-colors"><Trash2 size={14}/></button>
+                        </div>
+                        <div className="flex justify-between items-center text-xs mt-1">
+                          <div className="flex items-center gap-3">
+                            <button onClick={() => updateQuantity(item.id, -1)} className="text-slate-500 hover:text-yellow-500"><Minus size={14}/></button>
+                            <span className="font-sans font-bold text-yellow-500">{item.quantity}</span>
+                            <button onClick={() => updateQuantity(item.id, 1)} className="text-slate-500 hover:text-yellow-500"><Plus size={14}/></button>
+                          </div>
+                          <span className="font-sans text-slate-400 font-bold">${(item.price * item.quantity).toFixed(2)}</span>
+                        </div>
+                     </div>
+                   ))}
+                   <div className="pt-6">
+                      <div className="flex justify-between font-black uppercase text-lg mb-8 italic text-yellow-500">
+                        <span>Subtotal</span>
+                        <span>${cartTotal.toFixed(2)}</span>
+                      </div>
+                      <button onClick={() => setActiveTab('cart')} className="w-full bg-yellow-500 text-black py-5 font-black uppercase tracking-[0.2em] rounded-sm hover:bg-yellow-400 transition-all">Checkout</button>
+                   </div>
+                 </div>
+               )}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'cart' && (
+          <div className="py-20 px-4 max-w-2xl mx-auto animate-in zoom-in-95 duration-500">
+            <div className="bg-black/95 p-8 border-t-8 border-yellow-500 shadow-2xl rounded-b-3xl relative">
+              {orderComplete ? (
+                <div className="text-center py-16 animate-in fade-in duration-1000">
+                   <img src={LOGO_FULL} alt="Logo" className="h-40 mx-auto mb-8 drop-shadow-2xl" />
+                   <h2 className="text-4xl font-black uppercase mb-6 mt-8 italic text-yellow-500">Order Fired!</h2>
+                   <p className="text-slate-400 font-sans mb-12 leading-relaxed italic text-lg max-w-sm mx-auto">
+                     "We've received your ticket. Your meal will be ready for pickup in about 20 minutes."
+                   </p>
+                   <button onClick={() => {setCart([]); setOrderComplete(false); setActiveTab('home');}} className="bg-white text-black px-12 py-5 font-black uppercase tracking-widest hover:bg-yellow-500 transition-colors rounded-full shadow-2xl font-sans">Return Home</button>
+                </div>
+              ) : (
+                <div className="space-y-8">
+                  <div className="flex items-center justify-between mb-4 border-b-2 border-yellow-500 pb-4">
+                    <h2 className="text-3xl font-black uppercase italic tracking-tighter">Bag Review</h2>
+                    <img src={LOGO_FULL} alt="Logo Small" className="h-14" />
+                  </div>
+                  {cart.length === 0 ? (
+                    <div className="text-center py-20 opacity-50">
+                      <p className="italic mb-8 font-sans">"Your bag is looking a bit lonely."</p>
+                      <button onClick={() => setActiveTab('order')} className="text-yellow-500 font-black uppercase tracking-widest underline decoration-2 hover:text-white transition-colors">Start Order</button>
+                    </div>
+                  ) : (
+                    <div className="space-y-8">
+                      <div className="space-y-6">
+                        {cart.map(item => (
+                          <div key={item.id} className="flex justify-between items-center border-b border-white/5 pb-6">
+                            <div>
+                              <span className="font-bold text-xl uppercase leading-none text-white tracking-tight">{item.name}</span>
+                              <p className="text-[10px] text-slate-500 font-sans mt-2 italic uppercase tracking-widest font-bold">Qty: {item.quantity} × ${item.price.toFixed(2)}</p>
+                            </div>
+                            <span className="font-sans font-black text-yellow-500 text-2xl">${(item.price * item.quantity).toFixed(2)}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="bg-white/5 p-8 rounded-3xl space-y-4 font-sans border border-white/10 shadow-inner">
+                        <div className="flex justify-between text-slate-400 text-sm font-bold uppercase tracking-widest"><span>Order Subtotal</span><span>${cartTotal.toFixed(2)}</span></div>
+                        <div className="flex justify-between text-slate-400 text-sm font-bold uppercase tracking-widest"><span>Ardmore Sales Tax</span><span>${(cartTotal * 0.085).toFixed(2)}</span></div>
+                        <div className="flex justify-between text-3xl font-black text-white pt-6 border-t border-white/10 mt-2">
+                          <span className="uppercase italic tracking-tighter text-yellow-500 underline underline-offset-8 decoration-yellow-500/30">Total Due</span>
+                          <span className="text-yellow-500">${(cartTotal * 1.085).toFixed(2)}</span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-8 pt-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                            <label className="text-[10px] font-black uppercase text-yellow-500 tracking-[0.4em] ml-2">Pickup Name</label>
+                            <input type="text" className="w-full bg-white/5 border border-white/10 p-5 focus:ring-2 focus:ring-yellow-500 outline-none rounded-2xl text-white font-sans transition-all" placeholder="Enter name" />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-[10px] font-black uppercase text-yellow-500 tracking-[0.4em] ml-2">Mobile Number</label>
+                            <input type="tel" className="w-full bg-white/5 border border-white/10 p-5 focus:ring-2 focus:ring-yellow-500 outline-none rounded-2xl text-white font-sans transition-all" placeholder="(580) 000-0000" />
+                          </div>
+                        </div>
+                        <button onClick={() => setOrderComplete(true)} className="w-full bg-yellow-500 text-black py-7 font-black uppercase tracking-[0.3em] text-xl hover:bg-yellow-400 transition-all rounded-sm shadow-xl active:scale-[0.98]">Submit Order</button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-black border-t-4 border-yellow-600 pt-24 pb-10 px-4 mt-32 relative overflow-visible shadow-[0_-20px_50px_rgba(0,0,0,0.5)]">
+        
+        {/* Mascot Cat perched on top edge of footer */}
+        <MascotCat className="top-0 left-1/2 -translate-x-1/2 -translate-y-[82%]" />
+
+        <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12 relative z-10">
+          <div>
+            <div className="flex items-center gap-2 mb-8 h-12">
+              <img src={LOGO_FULL} alt="Footer Logo" className="h-full w-auto object-contain" />
+              <h2 className="text-2xl font-black uppercase italic tracking-tighter leading-none">Café Alley</h2>
+            </div>
+            <p className="text-slate-500 text-sm leading-relaxed font-sans mb-8 italic">
+              "A Main Street staple in historic downtown Ardmore. Dedicated to fine food, scratch-made desserts, and classic Southern hospitality since 1986."
+            </p>
+            <div className="flex gap-6">
+              <a href="#" className="text-slate-400 hover:text-yellow-500 transition-colors transform hover:scale-110"><Facebook size={24}/></a>
+              <a href="#" className="text-slate-400 hover:text-yellow-500 transition-colors transform hover:scale-110"><Instagram size={24}/></a>
+            </div>
+          </div>
+          
+          <div>
+            <h4 className="font-black uppercase tracking-[0.4em] text-[10px] text-yellow-500 mb-8">Location</h4>
+            <div className="flex gap-4 text-slate-400 text-sm font-sans mb-6 italic group cursor-pointer">
+              <MapPin className="text-yellow-500 shrink-0 transition-transform group-hover:scale-110" size={20}/>
+              <span>115 West Main St.<br/>Ardmore, OK 73401</span>
+            </div>
+            <div className="flex gap-4 text-slate-400 text-sm font-sans italic group cursor-pointer">
+              <Phone className="text-yellow-500 shrink-0 transition-transform group-hover:scale-110" size={20}/>
+              <span>(580) 223-2233</span>
+            </div>
+          </div>
+
+          <div>
+            <h4 className="font-black uppercase tracking-[0.4em] text-[10px] text-yellow-500 mb-8">Kitchen Hours</h4>
+            <ul className="text-slate-400 text-sm font-sans space-y-3 italic">
+              <li className="flex justify-between border-b border-white/5 pb-2"><span>Mon - Thu</span> <span className="text-white font-bold tracking-tighter">11am - 9pm</span></li>
+              <li className="flex justify-between border-b border-white/5 pb-2"><span>Fri - Sat</span> <span className="text-white font-bold tracking-tighter">11am - 10pm</span></li>
+              <li className="flex justify-between opacity-30"><span>Sunday</span> <span>Closed</span></li>
+            </ul>
+          </div>
+
+          <div className="bg-yellow-500/5 p-8 border border-yellow-500/10 rounded-3xl backdrop-blur-sm group hover:border-yellow-500/30 transition-all">
+            <p className="text-[10px] text-yellow-500 uppercase tracking-widest font-black mb-2 italic">Our Family Spots</p>
+            <h4 className="font-black uppercase tracking-tighter text-2xl mb-4 italic group-hover:text-yellow-500 transition-colors text-center">Dew Drop Inn</h4>
+            <p className="text-xs text-slate-500 mb-6 leading-relaxed font-sans italic text-center">"Visit our casual sister location. Cold beer and great company just down the street."</p>
+            <div className="flex items-center justify-center gap-2 group/btn cursor-pointer">
+              <span className="text-[10px] font-black uppercase text-white hover:text-yellow-500 transition-colors">Visit Site</span>
+              <ChevronRight size={14} className="text-white group-hover/btn:translate-x-1 transition-transform" />
+            </div>
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto mt-20 pt-10 border-t border-white/5 text-center text-[10px] uppercase font-bold tracking-[0.6em] text-slate-700 italic">
+          © {new Date().getFullYear()} Café Alley Downtown Ardmore • 1986-Present
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default App;
