@@ -249,7 +249,12 @@
                         
                         <div className="max-w-7xl mx-auto flex items-center justify-between h-20">
                             <div className="flex items-center gap-2 cursor-pointer h-full" onClick={() => setActiveTab('home')}>
-                                <img src={LOGO_NAV} alt="Cafe Alley Logo" className="h-full w-auto object-contain py-1" />
+                                {/* Top logo replaced with just the cat and moved down 40% */}
+                                <img 
+                                    src={CAT_MASCOT} 
+                                    alt="Cafe Alley Icon" 
+                                    className="h-full w-auto object-contain translate-y-[40%]" 
+                                />
                                 <div className="flex flex-col -ml-1 text-white">
                                     <span className="text-2xl font-black tracking-tighter uppercase italic leading-none">Café Alley</span>
                                     <span className="text-[9px] tracking-[0.3em] text-yellow-500 uppercase font-bold">Downtown Ardmore</span>
@@ -277,7 +282,7 @@
                             <div className="px-4 py-12 md:py-24 animate-in fade-in duration-700">
                                 <div className="grid md:grid-cols-2 gap-12 items-center">
                                     <div className="bg-black/90 p-8 md:p-16 border-l-8 border-yellow-500 shadow-2xl rounded-r-3xl">
-                                        <span className="text-yellow-500 font-bold uppercase tracking-[0.4em] mb-4 block">Since 1986</span>
+                                        <span className="text-yellow-500 font-bold uppercase tracking-[0.4em] mb-4 block text-sm">Since 1986</span>
                                         <h1 className="text-5xl md:text-7xl font-black text-white mb-6 uppercase leading-none tracking-tighter italic">Ardmore's <br/> <span className="text-yellow-500">Signature</span> Spot</h1>
                                         <p className="text-lg text-slate-300 mb-10 leading-relaxed font-sans max-w-md italic opacity-90">"A local tradition of fine steaks, specialty desserts, and classic cocktails in the heart of historic downtown."</p>
                                         <div className="flex flex-wrap gap-4 font-sans text-sm md:text-base">
@@ -293,32 +298,18 @@
                                     </div>
                                 </div>
 
-                                <div className="mt-32 grid grid-cols-1 md:grid-cols-3 gap-8">
-                                    <div className="bg-black/90 border-y-4 border-yellow-600 p-8 text-center rounded-3xl shadow-2xl flex flex-col justify-between">
-                                        <div>
-                                            <h2 className="text-yellow-500 text-xs font-black uppercase tracking-[0.5em] mb-4 text-center w-full font-sans italic tracking-tighter">Our Classic Pub</h2>
-                                            <h3 className="text-3xl font-black text-white uppercase italic mb-6 text-center w-full">The Dew Drop Inn</h3>
-                                            <p className="text-sm text-slate-400 font-sans mb-8 leading-relaxed italic text-center">"Our casual sister location just down Main Street. Cold beer and friendly conversation."</p>
-                                        </div>
-                                        <a href="https://www.facebook.com/DewDropInnArdmore/" target="_blank" className="inline-flex items-center justify-center gap-2 bg-white text-black px-8 py-3 font-black uppercase tracking-tighter rounded-full hover:bg-yellow-500 transition-colors shadow-lg text-sm">Visit the Inn <Icon name="ExternalLink" size={16}/></a>
+                                <div className="mt-32 grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div className="bg-black/90 border-y-4 border-yellow-600 p-12 text-center rounded-3xl shadow-2xl">
+                                        <h2 className="text-yellow-500 text-xs font-black uppercase tracking-[0.5em] mb-4 text-center w-full font-sans italic tracking-tighter uppercase">Our Classic Pub</h2>
+                                        <h3 className="text-4xl font-black text-white uppercase italic mb-6 text-center w-full">The Dew Drop Inn</h3>
+                                        <p className="max-w-xl mx-auto text-slate-400 font-sans mb-8 leading-relaxed italic text-lg text-center">"Our casual sister location just down Main Street. Cold beer and friendly conversation."</p>
+                                        <a href="https://www.facebook.com/DewDropInnArdmore/" target="_blank" className="inline-flex items-center gap-2 bg-white text-black px-12 py-4 font-black uppercase tracking-tighter rounded-full hover:bg-yellow-500 transition-colors shadow-lg">Visit the Inn <Icon name="ExternalLink" size={18}/></a>
                                     </div>
-
-                                    <div className="bg-black/90 border-y-4 border-yellow-600 p-8 text-center rounded-3xl shadow-2xl flex flex-col justify-between scale-105 z-10 border-white/20">
-                                        <div>
-                                            <h2 className="text-yellow-500 text-xs font-black uppercase tracking-[0.5em] mb-4 text-center w-full font-sans italic tracking-tighter">Sophisticated Dining</h2>
-                                            <h3 className="text-3xl font-black text-white uppercase italic mb-6 text-center w-full">The Commodore</h3>
-                                            <p className="text-sm text-slate-400 font-sans mb-8 leading-relaxed italic text-center">"Upscale American dining with premium steaks and fresh seafood in a classic grill & bar atmosphere."</p>
-                                        </div>
-                                        <a href="https://www.facebook.com/TheCommodoreArdmore/" target="_blank" className="inline-flex items-center justify-center gap-2 bg-white text-black px-8 py-3 font-black uppercase tracking-tighter rounded-full hover:bg-yellow-500 transition-colors shadow-lg text-sm">Discover The Commodore <Icon name="ExternalLink" size={16}/></a>
-                                    </div>
-
-                                    <div className="bg-black/90 border-y-4 border-yellow-600 p-8 text-center rounded-3xl shadow-2xl flex flex-col justify-between opacity-80 grayscale-[0.5]">
-                                        <div>
-                                            <h2 className="text-yellow-500 text-xs font-black uppercase tracking-[0.5em] mb-4 text-center w-full font-sans italic tracking-tighter">Private Events</h2>
-                                            <h3 className="text-3xl font-black text-white uppercase italic mb-6 text-center w-full">Hosting With Us</h3>
-                                            <p className="text-sm text-slate-400 font-sans mb-8 leading-relaxed italic text-center">Plan your next gathering at one of our unique Ardmore venues.</p>
-                                        </div>
-                                        <button onClick={() => setActiveTab('home')} className="inline-flex items-center justify-center gap-2 bg-white text-black px-8 py-3 font-black uppercase tracking-tighter rounded-full hover:bg-yellow-500 transition-colors shadow-lg text-sm">Contact Us <Icon name="Phone" size={16}/></button>
+                                    <div className="bg-black/90 border-y-4 border-yellow-600 p-12 text-center rounded-3xl shadow-2xl">
+                                        <h2 className="text-yellow-500 text-xs font-black uppercase tracking-[0.5em] mb-4 text-center w-full font-sans italic tracking-tighter uppercase">Sophisticated Dining</h2>
+                                        <h3 className="text-4xl font-black text-white uppercase italic mb-6 text-center w-full">The Commodore</h3>
+                                        <p className="max-w-xl mx-auto text-slate-400 font-sans mb-8 leading-relaxed italic text-lg text-center">"Experience upscale American dining with premium steaks and fresh seafood in a classic grill & bar atmosphere."</p>
+                                        <a href="https://www.facebook.com/TheCommodoreArdmore/" target="_blank" className="inline-flex items-center gap-2 bg-white text-black px-12 py-4 font-black uppercase tracking-tighter rounded-full hover:bg-yellow-500 transition-colors shadow-lg">Discover The Commodore <Icon name="ExternalLink" size={18}/></a>
                                     </div>
                                 </div>
                             </div>
@@ -362,7 +353,7 @@
                             <div className="py-12 px-4 flex flex-col lg:flex-row gap-8">
                                 <div className="lg:w-64 space-y-3">
                                     <div className="bg-black/90 p-6 mb-6 rounded-2xl border border-yellow-500/30 shadow-xl text-center">
-                                        <img src={LOGO_NAV} alt="Order Logo" className="h-20 mx-auto mb-4" />
+                                        <img src={CAT_MASCOT} alt="Order Cat" className="h-20 mx-auto mb-4" />
                                         <p className="text-[10px] font-black text-yellow-500 tracking-widest uppercase font-sans">Direct Pickup Only</p>
                                     </div>
                                     <div className="flex lg:flex-col gap-2 overflow-x-auto pb-4 lg:pb-0 no-scrollbar">
@@ -488,12 +479,12 @@
                     </main>
 
                     <footer className="bg-black border-t-4 border-yellow-500 pt-32 pb-10 px-4 mt-32 relative overflow-visible shadow-2xl">
-                        {/* Enlarged mascot cat perched on top of footer border - moved upwards per request */}
-                        <MascotCat className="top-0 left-1/2 -translate-x-1/2 -translate-y-[78%]" footer={true} />
+                        {/* mascot cat perched on footer border - moved down roughly 1/10th from previous pos (78% -> 68%) */}
+                        <MascotCat className="top-0 left-1/2 -translate-x-1/2 -translate-y-[68%]" footer={true} />
                         
                         <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12 relative z-10 text-white">
                             <div>
-                                {/* Footer logo enlarged 2.5x (around 200px based on nav original) */}
+                                {/* Footer logo enlarged 2.5x */}
                                 <div className="flex items-center gap-2 mb-8 h-[200px]">
                                     <img src={LOGO_NAV} alt="Footer Logo" className="h-full w-auto object-contain" />
                                     <h2 className="text-2xl font-black uppercase italic tracking-tighter leading-none">Café Alley</h2>
@@ -519,19 +510,26 @@
                                 </ul>
                             </div>
                             <div className="space-y-4">
-                                <div className="bg-yellow-500/5 p-6 border border-yellow-500/10 rounded-3xl backdrop-blur-sm group hover:border-yellow-500/30 transition-all">
+                                <div className="bg-zinc-900 p-6 border border-yellow-500/20 rounded-3xl group hover:border-yellow-500/50 transition-all">
                                     <p className="text-[10px] text-yellow-500 uppercase tracking-widest font-black mb-2 italic font-sans">Sister Spot</p>
                                     <h4 className="font-black uppercase tracking-tighter text-xl mb-2 italic group-hover:text-yellow-500 transition-colors">Dew Drop Inn</h4>
                                     <a href="https://www.facebook.com/DewDropInnArdmore/" target="_blank" className="flex items-center gap-2 font-sans text-[10px] font-black uppercase text-white hover:text-yellow-500 transition-all">
                                         Visit Pub <Icon name="ChevronRight" size={14}/>
                                     </a>
                                 </div>
-                                <div className="bg-yellow-500/5 p-6 border border-yellow-500/10 rounded-3xl backdrop-blur-sm group hover:border-yellow-500/30 transition-all">
+                                <div className="bg-zinc-900 p-6 border border-yellow-500/20 rounded-3xl group hover:border-yellow-500/50 transition-all">
                                     <p className="text-[10px] text-yellow-500 uppercase tracking-widest font-black mb-2 italic font-sans">Upscale American</p>
                                     <h4 className="font-black uppercase tracking-tighter text-xl mb-2 italic group-hover:text-yellow-500 transition-colors">The Commodore</h4>
                                     <a href="https://www.facebook.com/TheCommodoreArdmore/" target="_blank" className="flex items-center gap-2 font-sans text-[10px] font-black uppercase text-white hover:text-yellow-500 transition-all">
                                         Explore More <Icon name="ChevronRight" size={14}/>
                                     </a>
+                                </div>
+                                <div className="bg-zinc-900 p-6 border border-yellow-500/20 rounded-3xl group hover:border-yellow-500/50 transition-all">
+                                    <p className="text-[10px] text-yellow-500 uppercase tracking-widest font-black mb-2 italic font-sans">Private Parties</p>
+                                    <h4 className="font-black uppercase tracking-tighter text-xl mb-2 italic group-hover:text-yellow-500 transition-colors">Host With Us</h4>
+                                    <div className="flex items-center gap-2 font-sans text-[10px] font-black uppercase text-white hover:text-yellow-500 transition-all cursor-pointer">
+                                        Plan Event <Icon name="ChevronRight" size={14}/>
+                                    </div>
                                 </div>
                             </div>
                         </div>
