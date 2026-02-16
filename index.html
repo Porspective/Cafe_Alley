@@ -134,22 +134,22 @@
         
         // Asset Filenames
         const LOGO_NAV_TEXT = "cafe%20alleylogo.png";
-        const CAT_MASCOT = "cat_only_precise.jpg"; 
+        const CAT_MASCOT = "cat_only_precise.png"; 
         const BRICK_TEXTURE = "brick.jpg";
         const HERO_IMAGE = "sam.jpg";
 
-        // Gallery Images List with Layout Config - Corrected spaces to URL encoding %20
+        // Gallery Items reordered to put #10 next to #8
         const GALLERY_ITEMS = [
-            { src: "cafe%20alley%20fav1.jpg", className: "md:col-span-2 md:row-span-2" }, // Big Feature
-            { src: "cafe%20alley%20fav2.jpg", className: "md:row-span-2" }, // Tall
-            { src: "cafe%20alley%20fav3.jpg", className: "" }, // Square
-            { src: "cafe%20alley%20fav4.jpg", className: "" }, // Square
-            { src: "cafe%20alley%20fav5.jpg", className: "md:col-span-2" }, // Wide
-            { src: "cafe%20alley%20fav6.jpg", className: "md:col-span-2 md:row-span-2" }, // Big Feature
-            { src: "cafe%20alley%20fav7.jpg", className: "" }, // Square
-            { src: "cafe%20alley%20fav8.jpg", className: "md:row-span-2" }, // Tall
-            { src: "cafe%20alley%20fav9.jpg", className: "md:col-span-2" }, // Wide
-            { src: "cafe%20alley%20fav10.jpg", className: "" } // New Square in the bottom spot
+            { src: "cafe%20alley%20fav1.png", className: "md:col-span-2 md:row-span-2" },
+            { src: "cafe%20alley%20fav2.png", className: "md:row-span-2" },
+            { src: "cafe%20alley%20fav3.png", className: "" },
+            { src: "cafe%20alley%20fav4.png", className: "" },
+            { src: "cafe%20alley%20fav5.png", className: "md:col-span-2", objectPosition: "top" }, // Top align Fav 5
+            { src: "cafe%20alley%20fav6.png", className: "md:col-span-2 md:row-span-2" },
+            { src: "cafe%20alley%20fav7.png", className: "" },
+            { src: "cafe%20alley%20fav8.png", className: "md:row-span-2" },
+            { src: "cafe%20alley%20fav10.png", className: "" }, // Fav 10 moved next to 8
+            { src: "cafe%20alley%20fav9.png", className: "md:col-span-2" }
         ];
 
         const MENU_DATA = [
@@ -261,7 +261,7 @@
                     <nav className="bg-black border-b-4 border-yellow-500 sticky top-0 z-50 px-4 py-2 shadow-2xl relative">
                         <div className="max-w-7xl mx-auto flex items-center justify-between h-20">
                             <div className="flex items-center gap-2 cursor-pointer h-full" onClick={() => setActiveTab('home')}>
-                                {/* Logo cat mascot - Lowered significantly to translate-y-[40%] overlap */}
+                                {/* Logo cat mascot - Lowered significantly to overlapping position (40% down) */}
                                 <img 
                                     src={CAT_MASCOT} 
                                     alt="Cafe Alley Icon" 
@@ -324,6 +324,7 @@
                                                     src={item.src} 
                                                     alt={`Cafe Alley Favorite ${idx + 1}`} 
                                                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100"
+                                                    style={{ objectPosition: item.objectPosition || 'center' }}
                                                 />
                                                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
                                             </div>
@@ -513,8 +514,8 @@
                     </main>
 
                     <footer className="bg-black border-t-4 border-yellow-500 pt-32 pb-10 px-4 mt-32 relative overflow-visible shadow-2xl">
-                        {/* Mascot cat perched on footer border - set to -72% overlap per latest adjustment */}
-                        <MascotCat className="top-0 left-1/2 -translate-x-1/2 -translate-y-[72%]" footer={true} />
+                        {/* Mascot cat perched on footer border - Lowered significantly to translate-y-[50%] overlap */}
+                        <MascotCat className="top-0 left-1/2 -translate-x-1/2 -translate-y-[50%]" footer={true} />
                         
                         <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12 relative z-10 text-white font-sans">
                             <div>
@@ -523,7 +524,7 @@
                                     <img src={LOGO_NAV_TEXT} alt="Footer Logo" className="h-full w-auto object-contain" />
                                     <h2 className="text-2xl font-black uppercase italic tracking-tighter leading-none font-serif">Café Alley</h2>
                                 </div>
-                                <p className="text-slate-400 text-sm leading-relaxed mb-8 italic opacity-80 font-sans">"A Main Street staple in historic downtown Ardmore. Dedicated to fine food, scratch-made desserts, and classic Southern hospitality since 1986."</p>
+                                <p className="text-slate-500 text-sm leading-relaxed font-sans mb-8 italic opacity-80">"A Main Street staple in historic downtown Ardmore. Dedicated to fine food, scratch-made desserts, and classic Southern hospitality since 1986."</p>
                                 <div className="flex gap-6">
                                     <div className="text-slate-400 hover:text-yellow-500 transition-all transform hover:scale-110 cursor-pointer"><Icon name="Facebook" size={24}/></div>
                                     <div className="text-slate-400 hover:text-yellow-500 transition-all transform hover:scale-110 cursor-pointer"><Icon name="Instagram" size={24}/></div>
@@ -531,12 +532,12 @@
                             </div>
                             <div>
                                 <h4 className="font-black uppercase tracking-[0.4em] text-[10px] text-yellow-500 mb-8 uppercase font-sans">Location</h4>
-                                <div className="flex gap-4 text-slate-400 text-sm mb-6 italic"><Icon name="MapPin" className="text-yellow-500 shrink-0" size={20}/><span>115 West Main St.<br/>Ardmore, OK 73401</span></div>
+                                <div className="flex gap-4 text-slate-400 text-sm font-sans mb-6 italic"><Icon name="MapPin" className="text-yellow-500 shrink-0" size={20}/><span>115 West Main St.<br/>Ardmore, OK 73401</span></div>
                                 <div className="flex gap-4 text-slate-400 text-sm italic group cursor-pointer text-white"><Icon name="Phone" className="text-yellow-500 shrink-0" size={20}/><span>(580) 223-2233</span></div>
                             </div>
                             <div>
                                 <h4 className="font-black uppercase tracking-[0.4em] text-[10px] text-yellow-500 mb-8 uppercase tracking-widest font-sans">Kitchen Hours</h4>
-                                <ul className="text-slate-400 text-sm space-y-3 italic text-xs">
+                                <ul className="text-slate-400 text-sm font-sans space-y-3 italic text-xs">
                                     <li className="flex justify-between border-b border-white/5 pb-2 opacity-30"><span>Monday</span> <span className="font-bold">Closed</span></li>
                                     <li className="flex justify-between border-b border-white/5 pb-2"><span>Tue - Thu</span> <span className="text-white font-bold">11am - 9pm</span></li>
                                     <li className="flex justify-between border-b border-white/5 pb-2"><span>Fri - Sat</span> <span className="text-white font-bold">11am - 10pm</span></li>
@@ -561,7 +562,7 @@
                                 <div className="bg-zinc-950 p-6 border border-yellow-500/20 rounded-3xl group hover:border-yellow-500/50 transition-all text-center">
                                     <p className="text-[10px] text-yellow-500 uppercase tracking-widest font-black mb-2 italic font-sans">Private Parties</p>
                                     <h4 className="font-black uppercase tracking-tighter text-xl mb-2 italic group-hover:text-yellow-500 transition-colors font-serif">Host With Us</h4>
-                                    <div className="flex items-center gap-2 font-sans text-[10px] font-black uppercase text-white hover:text-yellow-500 transition-all cursor-pointer">
+                                    <div className="flex items-center justify-center gap-2 font-sans text-[10px] font-black uppercase text-white hover:text-yellow-500 transition-all cursor-pointer">
                                         Plan Event <Icon name="ChevronRight" size={14}/>
                                     </div>
                                 </div>
