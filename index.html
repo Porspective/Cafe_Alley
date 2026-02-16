@@ -15,7 +15,7 @@
         
         body {
             font-family: 'Playfair Display', serif;
-            background-color: #1a1a1a; /* Fallback */
+            background-color: #1a1a1a;
         }
         .font-sans {
             font-family: 'Source Sans Pro', sans-serif;
@@ -28,10 +28,6 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
-        /* Ensure brick texture is crisp */
-        .brick-bg {
-            background-blend-mode: overlay;
-        }
     </style>
 </head>
 <body>
@@ -40,7 +36,7 @@
     <script type="text/babel">
         const { useState, useMemo } = React;
 
-        // Custom Icon components using SVG paths to avoid external script loading errors
+        // Custom Icon components using SVG paths to ensure they render without external library dependencies
         const Icon = ({ name, size = 24, className = "" }) => {
             const icons = {
                 ShoppingBag: (
@@ -136,10 +132,10 @@
             );
         };
         
-        // Asset Filenames - Updated to use png extensions for root directory hosting
-        const LOGO_FULL = "cafe_alley_no_background.png";
-        const CAT_ONLY = "cafe_alley_just_cat.png";
-        const BRICK_TEXTURE = "image_53107e.png";
+        // Final Updated Assets
+        const LOGO_NAV = "cafe%20alleylogo.png"; // Space replaced with %20 for URL compatibility
+        const CAT_MASCOT = "cat_only_precise.png"; 
+        const BRICK_TEXTURE = "brick.jpg";
 
         const MENU_DATA = [
             {
@@ -177,7 +173,7 @@
                 items: [
                     { id: 'b1', name: "The Southern Favourite", price: 11.00, description: "House pimento cheese, bacon, fried green tomato, lettuce, onion & pickle on brioche. With fries." },
                     { id: 'b2', name: "Alley Burger", price: 11.00, description: "Bacon, Tillamook Cheddar, mayo & a fried egg on a pretzel bun. With fries." },
-                    { id: 'b3', name: "Maytag blue cheese & bacon on a pretzel bun. With fries.", price: 12.00, description: "Maytag blue cheese & bacon on a pretzel bun. With fries." },
+                    { id: 'b3', name: "Maytag Blue Cheese", price: 12.00, description: "Maytag blue cheese & bacon on a pretzel bun. With fries." },
                     { id: 'b4', name: "California Burger", price: 11.00, description: "Lettuce, tomato, sprouts, guacamole & Jack cheese on brioche. With fries." },
                     { id: 'b5', name: "Old-Fashioned Cheese Burger", price: 9.00, description: "Tillamook Cheddar, lettuce, tomato, onion & pickle. With fries." }
                 ]
@@ -192,25 +188,25 @@
             }
         ];
 
-        // Mascot Cat component that perches on borders
-        const MascotCat = ({ className = "" }) => (
+        const MascotCat = ({ className = "", footer = false }) => (
             <div className={`absolute z-[60] pointer-events-none select-none ${className}`}>
                 <img 
-                    src={CAT_ONLY} 
+                    src={CAT_MASCOT} 
                     alt="Mascot Cat" 
-                    className="h-20 md:h-28 w-auto drop-shadow-[0_-5px_15px_rgba(0,0,0,0.8)]"
-                    style={{ filter: 'brightness(0.9) contrast(1.1)' }}
+                    className={`${footer ? 'h-40 md:h-72' : 'h-16 md:h-20'} w-auto drop-shadow-[0_-5px_15px_rgba(0,0,0,0.8)]`}
+                    style={{ 
+                        mixBlendMode: 'normal'
+                    }}
                 />
             </div>
         );
 
-        // Background with light overlay to ensure texture is highly visible
         const BrickBackground = () => (
             <div 
-                className="fixed inset-0 z-[-1] brick-bg" 
+                className="fixed inset-0 z-[-1]" 
                 style={{ 
                     backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${BRICK_TEXTURE}')`,
-                    backgroundSize: '800px',
+                    backgroundSize: '1000px',
                     backgroundRepeat: 'repeat',
                     backgroundAttachment: 'fixed'
                 }}
@@ -246,13 +242,13 @@
                 <div className="min-h-screen text-slate-100 selection:bg-yellow-500/30">
                     <BrickBackground />
                     
-                    <nav className="bg-black/95 border-b-4 border-yellow-500 sticky top-0 z-50 px-4 py-2 shadow-2xl relative">
-                        {/* Cat mascot perched on header, tail dipping in */}
-                        <MascotCat className="top-0 right-10 md:right-40 -translate-y-[70%]" />
+                    <nav className="bg-black border-b-4 border-yellow-500 sticky top-0 z-50 px-4 py-2 shadow-2xl relative">
+                        {/* Smaller cat mascot perched on header border */}
+                        <MascotCat className="top-0 right-10 md:right-40 -translate-y-[75%]" />
                         
                         <div className="max-w-7xl mx-auto flex items-center justify-between h-20">
                             <div className="flex items-center gap-2 cursor-pointer h-full" onClick={() => setActiveTab('home')}>
-                                <img src={LOGO_FULL} alt="Cafe Alley Logo" className="h-full w-auto object-contain py-1" />
+                                <img src={LOGO_NAV} alt="Cafe Alley Logo" className="h-full w-auto object-contain py-1" />
                                 <div className="flex flex-col -ml-1">
                                     <span className="text-2xl font-black text-white tracking-tighter uppercase italic leading-none">Café Alley</span>
                                     <span className="text-[9px] tracking-[0.3em] text-yellow-500 uppercase font-bold">Downtown Ardmore</span>
@@ -280,25 +276,24 @@
                             <div className="px-4 py-12 md:py-24 animate-in fade-in duration-700">
                                 <div className="grid md:grid-cols-2 gap-12 items-center">
                                     <div className="bg-black/90 p-8 md:p-16 border-l-8 border-yellow-500 shadow-2xl rounded-r-3xl">
-                                        <img src={LOGO_FULL} alt="Large Logo" className="h-48 mb-8 block drop-shadow-2xl" />
                                         <span className="text-yellow-500 font-bold uppercase tracking-[0.4em] mb-4 block">Since 1986</span>
                                         <h1 className="text-5xl md:text-7xl font-black text-white mb-6 uppercase leading-none tracking-tighter italic">Ardmore's <br/> <span className="text-yellow-500">Signature</span> Spot</h1>
                                         <p className="text-lg text-slate-300 mb-10 leading-relaxed font-sans max-w-md italic opacity-90">"A local tradition of fine steaks, specialty desserts, and classic cocktails in the heart of historic downtown."</p>
-                                        <div className="flex flex-wrap gap-4 font-sans">
-                                            <button onClick={() => setActiveTab('order')} className="bg-yellow-500 text-black px-12 py-5 font-black uppercase tracking-widest transition-all rounded-sm shadow-xl hover:-translate-y-1">Start Order</button>
-                                            <button onClick={() => setActiveTab('menu')} className="border-2 border-white text-white px-12 py-5 font-black uppercase tracking-widest transition-all rounded-sm hover:bg-white hover:text-black">View Menu</button>
+                                        <div className="flex flex-wrap gap-4 font-sans text-sm md:text-base">
+                                            <button onClick={() => setActiveTab('order')} className="bg-yellow-500 text-black px-10 py-4 font-black uppercase tracking-widest transition-all rounded-sm shadow-xl hover:-translate-y-1">Start Order</button>
+                                            <button onClick={() => setActiveTab('menu')} className="border-2 border-white text-white px-10 py-4 font-black uppercase tracking-widest transition-all rounded-sm hover:bg-white hover:text-black">View Menu</button>
                                         </div>
                                     </div>
                                     <div className="hidden md:block relative">
                                         <div className="relative border-8 border-black shadow-2xl transform rotate-2 overflow-hidden rounded-lg group">
-                                            <img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&q=80&w=1200" className="w-full h-[600px] object-cover transition-transform duration-700 group-hover:scale-105" />
-                                            <div className="absolute bottom-8 left-8 right-8 text-center bg-yellow-500 p-4 text-black font-black uppercase tracking-widest italic shadow-lg">115 West Main St • Since 1986</div>
+                                            <img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&q=80&w=1200" className="w-full h-[600px] object-cover transition-transform duration-700 group-hover:scale-105 opacity-80" />
+                                            <div className="absolute bottom-8 left-8 right-8 text-center bg-yellow-500 p-4 text-black font-black uppercase tracking-widest italic shadow-lg">115 West Main St • Ardmore, OK</div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="mt-32 bg-black/90 border-y-4 border-yellow-600 p-12 text-center rounded-3xl shadow-2xl">
-                                    <h2 className="text-yellow-500 text-xs font-black uppercase tracking-[0.5em] mb-4 text-center w-full font-sans">Our Family Story</h2>
+                                    <h2 className="text-yellow-500 text-xs font-black uppercase tracking-[0.5em] mb-4 text-center w-full font-sans italic tracking-tighter uppercase">Our Story Continues</h2>
                                     <h3 className="text-4xl md:text-6xl font-black text-white uppercase italic mb-6 text-center w-full">The Dew Drop Inn</h3>
                                     <p className="max-w-xl mx-auto text-slate-400 font-sans mb-8 leading-relaxed italic text-lg">"Our casual sister location just down Main Street. Cold beer and friendly conversation."</p>
                                     <a href="#" className="inline-flex items-center gap-2 bg-white text-black px-12 py-4 font-black uppercase tracking-tighter rounded-full hover:bg-yellow-500 transition-colors shadow-lg">Visit the Inn <Icon name="ExternalLink" size={18}/></a>
@@ -311,7 +306,6 @@
                                 <div className="max-w-4xl mx-auto bg-[#fffdfa] text-black p-8 md:p-16 shadow-[0_0_80px_rgba(0,0,0,0.8)] relative border-x-8 border-black">
                                     <div className="absolute top-4 left-4 right-4 bottom-4 border border-black/5 pointer-events-none"></div>
                                     <div className="text-center mb-16 relative">
-                                        <img src={LOGO_FULL} alt="Menu Logo" className="h-32 mx-auto mb-6" />
                                         <h2 className="text-5xl font-black uppercase tracking-tighter italic leading-none">Café Alley</h2>
                                         <div className="w-24 h-1 bg-yellow-500 mx-auto my-6"></div>
                                         <p className="uppercase tracking-[0.3em] font-bold text-[10px] opacity-60 italic">Historic Downtown Ardmore • Since 1986</p>
@@ -344,9 +338,9 @@
                         {activeTab === 'order' && (
                             <div className="py-12 px-4 flex flex-col lg:flex-row gap-8">
                                 <div className="lg:w-64 space-y-3">
-                                    <div className="bg-black/90 p-6 mb-6 rounded-2xl border border-yellow-500/30 shadow-xl text-center">
-                                        <img src={LOGO_FULL} alt="Logo" className="h-20 mx-auto mb-4" />
-                                        <p className="text-[10px] font-black text-yellow-500 tracking-widest uppercase">Direct Pickup Only</p>
+                                    <div className="bg-black p-6 mb-6 rounded-2xl border border-yellow-500/30 shadow-xl text-center">
+                                        <img src={LOGO_NAV} alt="Order Logo" className="h-20 mx-auto mb-4" />
+                                        <p className="text-[10px] font-black text-yellow-500 tracking-widest uppercase font-sans">Direct Pickup Only</p>
                                     </div>
                                     <div className="flex lg:flex-col gap-2 overflow-x-auto pb-4 lg:pb-0 no-scrollbar">
                                         {MENU_DATA.map(cat => (
@@ -361,7 +355,7 @@
                                         <div key={item.id} className="bg-black/90 border border-white/5 p-6 flex flex-col justify-between hover:border-yellow-500 transition-all rounded-2xl shadow-xl group">
                                             <div>
                                                 <div className="flex justify-between items-start mb-4">
-                                                    <h4 className="text-lg font-bold uppercase tracking-tight text-white group-hover:text-yellow-500 transition-colors">{item.name}</h4>
+                                                    <h4 className="text-lg font-bold uppercase tracking-tight text-white group-hover:text-yellow-600 transition-colors">{item.name}</h4>
                                                     <span className="text-yellow-500 font-sans font-black text-lg">${item.price.toFixed(2)}</span>
                                                 </div>
                                                 <p className="text-slate-400 text-xs font-sans mb-8 leading-relaxed italic opacity-80">{item.description}</p>
@@ -371,7 +365,7 @@
                                     ))}
                                 </div>
                                 <div className="lg:w-80 bg-black/95 border border-yellow-500/20 p-6 h-fit sticky top-28 rounded-3xl shadow-2xl backdrop-blur-xl">
-                                    <h3 className="text-xl font-black uppercase tracking-widest mb-6 border-b-2 border-yellow-500 pb-2 italic">Current Order</h3>
+                                    <h3 className="text-xl font-black uppercase tracking-widest mb-6 border-b-2 border-yellow-500 pb-2 italic font-serif">Current Order</h3>
                                     {cart.length === 0 ? (
                                         <div className="py-16 text-center opacity-40">
                                             <Icon name="ShoppingBag" className="mx-auto text-slate-500 mb-4" size={40} />
@@ -412,16 +406,14 @@
                                 <div className="bg-black/95 p-8 border-t-8 border-yellow-500 shadow-2xl rounded-b-3xl relative">
                                     {orderComplete ? (
                                         <div className="text-center py-16 animate-in fade-in duration-1000">
-                                            <img src={LOGO_FULL} alt="Logo" className="h-40 mx-auto mb-8 drop-shadow-2xl" />
                                             <h2 className="text-4xl font-black uppercase mb-6 italic text-yellow-500 tracking-tighter">Order Fired!</h2>
                                             <p className="text-slate-400 font-sans mb-12 italic text-lg max-w-sm mx-auto opacity-90">"We've received your ticket. Your meal will be ready for pickup at our Downtown location in approximately 20 minutes."</p>
-                                            <button onClick={() => {setCart([]); setOrderComplete(false); setActiveTab('home');}} className="bg-white text-black px-12 py-5 font-black uppercase rounded-full shadow-2xl hover:bg-yellow-500 transition-colors">Return to Home</button>
+                                            <button onClick={() => {setCart([]); setOrderComplete(false); setActiveTab('home');}} className="bg-white text-black px-12 py-5 font-black uppercase rounded-full shadow-2xl hover:bg-yellow-500 transition-colors font-sans">Return to Home</button>
                                         </div>
                                     ) : (
                                         <div className="space-y-8">
                                             <div className="flex items-center justify-between mb-4 border-b-2 border-yellow-500 pb-4">
                                                 <h2 className="text-3xl font-black uppercase italic tracking-tighter">Bag Review</h2>
-                                                <img src={LOGO_FULL} alt="Logo Small" className="h-14" />
                                             </div>
                                             {cart.length === 0 ? (
                                                 <div className="text-center py-20 opacity-50">
@@ -434,7 +426,7 @@
                                                         {cart.map(item => (
                                                             <div key={item.id} className="flex justify-between items-center border-b border-white/5 pb-6">
                                                                 <div>
-                                                                    <span className="font-bold text-xl uppercase leading-none text-white tracking-tight">{item.name}</span>
+                                                                    <span className="font-bold text-xl uppercase leading-none text-white tracking-tight font-serif">{item.name}</span>
                                                                     <p className="text-[10px] text-slate-500 font-sans mt-2 italic uppercase font-bold tracking-widest">Qty: {item.quantity} × ${item.price.toFixed(2)}</p>
                                                                 </div>
                                                                 <span className="font-sans font-black text-yellow-500 text-2xl">${(item.price * item.quantity).toFixed(2)}</span>
@@ -445,7 +437,7 @@
                                                     <div className="bg-white/5 p-8 rounded-3xl space-y-4 font-sans border border-white/10 shadow-inner">
                                                         <div className="flex justify-between text-slate-400 text-sm font-bold uppercase tracking-widest font-sans"><span>Order Subtotal</span><span>${cartTotal.toFixed(2)}</span></div>
                                                         <div className="flex justify-between text-slate-400 text-sm font-bold uppercase tracking-widest font-sans"><span>Ardmore Sales Tax</span><span>${(cartTotal * 0.085).toFixed(2)}</span></div>
-                                                        <div className="flex justify-between text-3xl font-black text-white pt-6 border-t border-white/10 mt-2">
+                                                        <div className="flex justify-between text-3xl font-black text-white pt-6 border-t border-white/10 mt-2 font-serif">
                                                             <span className="uppercase italic tracking-tighter">Total Amount</span>
                                                             <span className="text-yellow-500 underline underline-offset-8 decoration-yellow-500/20">${(cartTotal * 1.085).toFixed(2)}</span>
                                                         </div>
@@ -472,14 +464,14 @@
                         )}
                     </main>
 
-                    <footer className="bg-black border-t-4 border-yellow-600 pt-28 pb-10 px-4 mt-32 relative overflow-visible shadow-2xl">
-                        {/* Mascot cat perched on top of footer border */}
-                        <MascotCat className="top-0 left-1/2 -translate-x-1/2 -translate-y-[82%]" />
+                    <footer className="bg-black border-t-4 border-yellow-500 pt-32 pb-10 px-4 mt-32 relative overflow-visible shadow-2xl">
+                        {/* Enlarged mascot cat perched on top of footer border */}
+                        <MascotCat className="top-0 left-1/2 -translate-x-1/2 -translate-y-[85%]" footer={true} />
                         
                         <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12 relative z-10">
                             <div>
                                 <div className="flex items-center gap-2 mb-8 h-12">
-                                    <img src={LOGO_FULL} alt="Footer Logo" className="h-full w-auto object-contain" />
+                                    <img src={LOGO_NAV} alt="Footer Logo" className="h-full w-auto object-contain" />
                                     <h2 className="text-2xl font-black uppercase italic tracking-tighter leading-none">Café Alley</h2>
                                 </div>
                                 <p className="text-slate-500 text-sm leading-relaxed font-sans mb-8 italic opacity-80">"A Main Street staple in historic downtown Ardmore. Dedicated to fine food, scratch-made desserts, and classic Southern hospitality since 1986."</p>
@@ -491,23 +483,23 @@
                             <div>
                                 <h4 className="font-black uppercase tracking-[0.4em] text-[10px] text-yellow-500 mb-8 font-sans">The Shop</h4>
                                 <div className="flex gap-4 text-slate-400 text-sm font-sans mb-6 italic"><Icon name="MapPin" className="text-yellow-500 shrink-0" size={20}/><span>115 West Main St.<br/>Ardmore, OK 73401</span></div>
-                                <div className="flex gap-4 text-slate-400 text-sm font-sans italic"><Icon name="Phone" className="text-yellow-500 shrink-0" size={20}/><span>(580) 223-2233</span></div>
+                                <div className="flex gap-4 text-slate-400 text-sm font-sans italic group cursor-pointer"><Icon name="Phone" className="text-yellow-500 shrink-0" size={20}/><span>(580) 223-2233</span></div>
                             </div>
                             <div>
-                                <h4 className="font-black uppercase tracking-[0.4em] text-[10px] text-yellow-500 mb-8 font-sans">Kitchen Hours</h4>
-                                <ul className="text-slate-400 text-sm font-sans space-y-3 italic">
+                                <h4 className="font-black uppercase tracking-[0.4em] text-[10px] text-yellow-500 mb-8 font-sans uppercase tracking-widest">Kitchen Hours</h4>
+                                <ul className="text-slate-400 text-sm font-sans space-y-3 italic font-sans text-xs">
                                     <li className="flex justify-between border-b border-white/5 pb-2 opacity-30"><span>Monday</span> <span className="font-bold">Closed</span></li>
                                     <li className="flex justify-between border-b border-white/5 pb-2"><span>Tue - Thu</span> <span className="text-white font-bold">11am - 9pm</span></li>
                                     <li className="flex justify-between border-b border-white/5 pb-2"><span>Fri - Sat</span> <span className="text-white font-bold">11am - 10pm</span></li>
-                                    <li className="flex justify-between opacity-30"><span>Sunday</span> <span className="font-bold">Closed</span></li>
+                                    <li className="flex justify-between opacity-30"><span>Sunday</span> <span className="font-bold text-white">Closed</span></li>
                                 </ul>
                             </div>
                             <div className="bg-yellow-500/5 p-8 border border-yellow-500/10 rounded-3xl backdrop-blur-sm group hover:border-yellow-500/30 transition-all">
-                                <p className="text-[10px] text-yellow-500 uppercase tracking-widest font-black mb-2 italic">Our Family Spot</p>
+                                <p className="text-[10px] text-yellow-500 uppercase tracking-widest font-black mb-2 italic font-sans">Our Family Spot</p>
                                 <h4 className="font-black uppercase tracking-tighter text-2xl mb-4 italic text-center w-full group-hover:text-yellow-500 transition-colors">Dew Drop Inn</h4>
-                                <p className="text-xs text-slate-500 mb-6 leading-relaxed font-sans italic text-center">"Visit our casual sister location. Cold beer and great company just down the street."</p>
-                                <div className="flex items-center justify-center gap-2 cursor-pointer font-sans text-[10px] font-black uppercase text-white hover:text-yellow-500">
-                                    Visit Website <Icon name="ChevronRight" size={14}/>
+                                <p className="text-xs text-slate-500 mb-6 leading-relaxed font-sans italic text-center font-sans">"Visit our casual sister location. Cold beer and great company just down the street."</p>
+                                <div className="flex items-center justify-center gap-2 cursor-pointer font-sans text-[10px] font-black uppercase text-white hover:text-yellow-500 transition-all">
+                                    Visit Site <Icon name="ChevronRight" size={14}/>
                                 </div>
                             </div>
                         </div>
