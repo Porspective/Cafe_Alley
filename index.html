@@ -134,11 +134,11 @@
         
         // Asset Filenames
         const LOGO_NAV_TEXT = "cafe%20alleylogo.png";
-        const CAT_MASCOT = "cat_only_precise.png"; 
+        const CAT_MASCOT = "cat_only_precise.jpg"; 
         const BRICK_TEXTURE = "brick.jpg";
         const HERO_IMAGE = "sam.jpg";
 
-        // Gallery Images List with Layout Config - Filenames updated as requested
+        // Gallery Images List with Layout Config - Corrected spaces to URL encoding %20
         const GALLERY_ITEMS = [
             { src: "cafe%20alley%20fav1.jpg", className: "md:col-span-2 md:row-span-2" }, // Big Feature
             { src: "cafe%20alley%20fav2.jpg", className: "md:row-span-2" }, // Tall
@@ -259,13 +259,13 @@
                     <BrickBackground />
                     
                     <nav className="bg-black border-b-4 border-yellow-500 sticky top-0 z-50 px-4 py-2 shadow-2xl relative">
-                        <div className="max-w-7xl mx-auto flex items-center justify-between h-20 h-20">
+                        <div className="max-w-7xl mx-auto flex items-center justify-between h-20">
                             <div className="flex items-center gap-2 cursor-pointer h-full" onClick={() => setActiveTab('home')}>
-                                {/* Logo cat mascot - lowered decent bit per request to translate-y-[20%] */}
+                                {/* Logo cat mascot - Lowered significantly to translate-y-[40%] overlap */}
                                 <img 
                                     src={CAT_MASCOT} 
                                     alt="Cafe Alley Icon" 
-                                    className="h-40 w-auto object-contain translate-y-[20%]" 
+                                    className="h-40 w-auto object-contain translate-y-[40%]" 
                                 />
                                 <div className="flex flex-col -ml-1 text-white">
                                     <span className="text-2xl font-black tracking-tighter uppercase italic leading-none">Café Alley</span>
@@ -513,7 +513,7 @@
                     </main>
 
                     <footer className="bg-black border-t-4 border-yellow-500 pt-32 pb-10 px-4 mt-32 relative overflow-visible shadow-2xl">
-                        {/* Mascot cat perched on footer border - set to -72% overlap (moved "up a hair" per request) */}
+                        {/* Mascot cat perched on footer border - set to -72% overlap per latest adjustment */}
                         <MascotCat className="top-0 left-1/2 -translate-x-1/2 -translate-y-[72%]" footer={true} />
                         
                         <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12 relative z-10 text-white font-sans">
@@ -561,7 +561,7 @@
                                 <div className="bg-zinc-950 p-6 border border-yellow-500/20 rounded-3xl group hover:border-yellow-500/50 transition-all text-center">
                                     <p className="text-[10px] text-yellow-500 uppercase tracking-widest font-black mb-2 italic font-sans">Private Parties</p>
                                     <h4 className="font-black uppercase tracking-tighter text-xl mb-2 italic group-hover:text-yellow-500 transition-colors font-serif">Host With Us</h4>
-                                    <div className="flex items-center justify-center gap-2 font-sans text-[10px] font-black uppercase text-white hover:text-yellow-500 transition-all cursor-pointer">
+                                    <div className="flex items-center gap-2 font-sans text-[10px] font-black uppercase text-white hover:text-yellow-500 transition-all cursor-pointer">
                                         Plan Event <Icon name="ChevronRight" size={14}/>
                                     </div>
                                 </div>
