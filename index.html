@@ -133,7 +133,7 @@
         };
         
         // Asset Filenames
-        const LOGO_NAV = "cafe%20alleylogo.png";
+        const LOGO_NAV_TEXT = "cafe%20alleylogo.png";
         const CAT_MASCOT = "cat_only_precise.png"; 
         const BRICK_TEXTURE = "brick.jpg";
         const HERO_IMAGE = "sam.jpg";
@@ -189,12 +189,13 @@
             }
         ];
 
+        // Mascot Cat component that perches on borders
         const MascotCat = ({ className = "", footer = false, headerMascot = false }) => (
             <div className={`absolute z-[60] pointer-events-none select-none ${className}`}>
                 <img 
                     src={CAT_MASCOT} 
                     alt="Mascot Cat" 
-                    className={`${footer ? 'h-40 md:h-72' : headerMascot ? 'h-32 md:h-40' : 'h-16 md:h-20'} w-auto drop-shadow-[0_-5px_15px_rgba(0,0,0,0.8)]`}
+                    className={`${footer ? 'h-40 md:h-72' : headerMascot ? 'h-32 md:h-44' : 'h-16 md:h-20'} w-auto drop-shadow-[0_-5px_15px_rgba(0,0,0,0.8)]`}
                     style={{ 
                         mixBlendMode: 'normal'
                     }}
@@ -244,12 +245,12 @@
                     <BrickBackground />
                     
                     <nav className="bg-black border-b-4 border-yellow-500 sticky top-0 z-50 px-4 py-2 shadow-2xl relative">
-                        {/* Enlarged header mascot - 2x size, sits above border, moved down 40% */}
+                        {/* Perched Nav Mascot - 2x bigger, above header, overlapping by 40% (moved down 40% from fully above) */}
                         <MascotCat className="top-0 right-10 md:right-40 -translate-y-[60%]" headerMascot={true} />
                         
                         <div className="max-w-7xl mx-auto flex items-center justify-between h-20">
                             <div className="flex items-center gap-2 cursor-pointer h-full" onClick={() => setActiveTab('home')}>
-                                {/* Logo replaced with just the cat silhouette mascot and moved down 40% */}
+                                {/* Logo replaced with just cat mascot - sized to fit header, moved down 40% */}
                                 <img 
                                     src={CAT_MASCOT} 
                                     alt="Cafe Alley Icon" 
@@ -479,14 +480,14 @@
                     </main>
 
                     <footer className="bg-black border-t-4 border-yellow-500 pt-32 pb-10 px-4 mt-32 relative overflow-visible shadow-2xl">
-                        {/* Mascot cat perched on footer border - moved up/down per request (60% overlap) */}
-                        <MascotCat className="top-0 left-1/2 -translate-x-1/2 -translate-y-[60%]" footer={true} />
+                        {/* Mascot cat perched on footer border - moved down exactly 1/10th of its length per request */}
+                        <MascotCat className="top-0 left-1/2 -translate-x-1/2 -translate-y-[50%]" footer={true} />
                         
                         <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12 relative z-10 text-white">
                             <div>
                                 {/* Footer logo enlarged 2.5x */}
                                 <div className="flex items-center gap-2 mb-8 h-[200px]">
-                                    <img src={LOGO_NAV} alt="Footer Logo" className="h-full w-auto object-contain" />
+                                    <img src={LOGO_NAV_TEXT} alt="Footer Logo" className="h-full w-auto object-contain" />
                                     <h2 className="text-2xl font-black uppercase italic tracking-tighter leading-none">Café Alley</h2>
                                 </div>
                                 <p className="text-slate-500 text-sm leading-relaxed font-sans mb-8 italic opacity-80">"A Main Street staple in historic downtown Ardmore. Dedicated to fine food, scratch-made desserts, and classic Southern hospitality since 1986."</p>
@@ -525,8 +526,8 @@
                                     </a>
                                 </div>
                                 <div className="bg-zinc-950 p-6 border border-yellow-500/20 rounded-3xl group hover:border-yellow-500/50 transition-all">
-                                    <p className="text-[10px] text-yellow-500 uppercase tracking-widest font-black mb-2 italic font-sans">Events & Venues</p>
-                                    <h4 className="font-black uppercase tracking-tighter text-xl mb-2 italic group-hover:text-yellow-500 transition-colors">Private Hosting</h4>
+                                    <p className="text-[10px] text-yellow-500 uppercase tracking-widest font-black mb-2 italic font-sans">Private Parties</p>
+                                    <h4 className="font-black uppercase tracking-tighter text-xl mb-2 italic group-hover:text-yellow-500 transition-colors">Host With Us</h4>
                                     <div className="flex items-center gap-2 font-sans text-[10px] font-black uppercase text-white hover:text-yellow-500 transition-all cursor-pointer">
                                         Plan Event <Icon name="ChevronRight" size={14}/>
                                     </div>
