@@ -136,6 +136,7 @@
         const LOGO_NAV = "cafe%20alleylogo.png";
         const CAT_MASCOT = "cat_only_precise.png"; 
         const BRICK_TEXTURE = "brick.jpg";
+        const HERO_IMAGE = "sam.jpg";
 
         const MENU_DATA = [
             {
@@ -286,24 +287,38 @@
                                     </div>
                                     <div className="hidden md:block relative">
                                         <div className="relative border-8 border-black shadow-2xl transform rotate-2 overflow-hidden rounded-lg group">
-                                            <img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&q=80&w=1200" className="w-full h-[600px] object-cover transition-transform duration-700 group-hover:scale-105 opacity-80" />
+                                            <img src={HERO_IMAGE} className="w-full h-[600px] object-cover transition-transform duration-700 group-hover:scale-105 opacity-80" />
                                             <div className="absolute bottom-8 left-8 right-8 text-center bg-yellow-500 p-4 text-black font-black uppercase tracking-widest italic shadow-lg">115 West Main St • Ardmore, OK</div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="mt-32 grid grid-cols-1 md:grid-cols-2 gap-8">
-                                    <div className="bg-black/90 border-y-4 border-yellow-600 p-12 text-center rounded-3xl shadow-2xl">
-                                        <h2 className="text-yellow-500 text-xs font-black uppercase tracking-[0.5em] mb-4 text-center w-full font-sans italic tracking-tighter uppercase">Our Classic Pub</h2>
-                                        <h3 className="text-4xl font-black text-white uppercase italic mb-6 text-center w-full">The Dew Drop Inn</h3>
-                                        <p className="max-w-xl mx-auto text-slate-400 font-sans mb-8 leading-relaxed italic text-lg text-center">"Our casual sister location just down Main Street. Cold beer and friendly conversation."</p>
-                                        <a href="https://www.facebook.com/DewDropInnArdmore/" target="_blank" className="inline-flex items-center gap-2 bg-white text-black px-12 py-4 font-black uppercase tracking-tighter rounded-full hover:bg-yellow-500 transition-colors shadow-lg">Visit the Inn <Icon name="ExternalLink" size={18}/></a>
+                                <div className="mt-32 grid grid-cols-1 md:grid-cols-3 gap-8">
+                                    <div className="bg-black/90 border-y-4 border-yellow-600 p-8 text-center rounded-3xl shadow-2xl flex flex-col justify-between">
+                                        <div>
+                                            <h2 className="text-yellow-500 text-xs font-black uppercase tracking-[0.5em] mb-4 text-center w-full font-sans italic tracking-tighter">Our Classic Pub</h2>
+                                            <h3 className="text-3xl font-black text-white uppercase italic mb-6 text-center w-full">The Dew Drop Inn</h3>
+                                            <p className="text-sm text-slate-400 font-sans mb-8 leading-relaxed italic text-center">"Our casual sister location just down Main Street. Cold beer and friendly conversation."</p>
+                                        </div>
+                                        <a href="https://www.facebook.com/DewDropInnArdmore/" target="_blank" className="inline-flex items-center justify-center gap-2 bg-white text-black px-8 py-3 font-black uppercase tracking-tighter rounded-full hover:bg-yellow-500 transition-colors shadow-lg text-sm">Visit the Inn <Icon name="ExternalLink" size={16}/></a>
                                     </div>
-                                    <div className="bg-black/90 border-y-4 border-yellow-600 p-12 text-center rounded-3xl shadow-2xl">
-                                        <h2 className="text-yellow-500 text-xs font-black uppercase tracking-[0.5em] mb-4 text-center w-full font-sans italic tracking-tighter uppercase">Sophisticated Dining</h2>
-                                        <h3 className="text-4xl font-black text-white uppercase italic mb-6 text-center w-full">The Commodore</h3>
-                                        <p className="max-w-xl mx-auto text-slate-400 font-sans mb-8 leading-relaxed italic text-lg text-center">"Experience upscale American dining with premium steaks and fresh seafood in a classic grill & bar atmosphere."</p>
-                                        <a href="https://www.facebook.com/TheCommodoreArdmore/" target="_blank" className="inline-flex items-center gap-2 bg-white text-black px-12 py-4 font-black uppercase tracking-tighter rounded-full hover:bg-yellow-500 transition-colors shadow-lg">Discover The Commodore <Icon name="ExternalLink" size={18}/></a>
+
+                                    <div className="bg-black/90 border-y-4 border-yellow-600 p-8 text-center rounded-3xl shadow-2xl flex flex-col justify-between scale-105 z-10 border-white/20">
+                                        <div>
+                                            <h2 className="text-yellow-500 text-xs font-black uppercase tracking-[0.5em] mb-4 text-center w-full font-sans italic tracking-tighter">Sophisticated Dining</h2>
+                                            <h3 className="text-3xl font-black text-white uppercase italic mb-6 text-center w-full">The Commodore</h3>
+                                            <p className="text-sm text-slate-400 font-sans mb-8 leading-relaxed italic text-center">"Upscale American dining with premium steaks and fresh seafood in a classic grill & bar atmosphere."</p>
+                                        </div>
+                                        <a href="https://www.facebook.com/TheCommodoreArdmore/" target="_blank" className="inline-flex items-center justify-center gap-2 bg-white text-black px-8 py-3 font-black uppercase tracking-tighter rounded-full hover:bg-yellow-500 transition-colors shadow-lg text-sm">Discover The Commodore <Icon name="ExternalLink" size={16}/></a>
+                                    </div>
+
+                                    <div className="bg-black/90 border-y-4 border-yellow-600 p-8 text-center rounded-3xl shadow-2xl flex flex-col justify-between opacity-80 grayscale-[0.5]">
+                                        <div>
+                                            <h2 className="text-yellow-500 text-xs font-black uppercase tracking-[0.5em] mb-4 text-center w-full font-sans italic tracking-tighter">Private Events</h2>
+                                            <h3 className="text-3xl font-black text-white uppercase italic mb-6 text-center w-full">Hosting With Us</h3>
+                                            <p className="text-sm text-slate-400 font-sans mb-8 leading-relaxed italic text-center">Plan your next gathering at one of our unique Ardmore venues.</p>
+                                        </div>
+                                        <button onClick={() => setActiveTab('home')} className="inline-flex items-center justify-center gap-2 bg-white text-black px-8 py-3 font-black uppercase tracking-tighter rounded-full hover:bg-yellow-500 transition-colors shadow-lg text-sm">Contact Us <Icon name="Phone" size={16}/></button>
                                     </div>
                                 </div>
                             </div>
@@ -473,13 +488,13 @@
                     </main>
 
                     <footer className="bg-black border-t-4 border-yellow-500 pt-32 pb-10 px-4 mt-32 relative overflow-visible shadow-2xl">
-                        {/* Enlarged mascot cat perched on top of footer border - moved upwards to sit more clearly on the line */}
-                        <MascotCat className="top-0 left-1/2 -translate-x-1/2 -translate-y-[70%]" footer={true} />
+                        {/* Enlarged mascot cat perched on top of footer border - moved upwards per request */}
+                        <MascotCat className="top-0 left-1/2 -translate-x-1/2 -translate-y-[78%]" footer={true} />
                         
                         <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12 relative z-10 text-white">
                             <div>
-                                {/* Footer logo enlarged 2.5x */}
-                                <div className="flex items-center gap-2 mb-8 h-[120px]">
+                                {/* Footer logo enlarged 2.5x (around 200px based on nav original) */}
+                                <div className="flex items-center gap-2 mb-8 h-[200px]">
                                     <img src={LOGO_NAV} alt="Footer Logo" className="h-full w-auto object-contain" />
                                     <h2 className="text-2xl font-black uppercase italic tracking-tighter leading-none">Café Alley</h2>
                                 </div>
@@ -490,7 +505,7 @@
                                 </div>
                             </div>
                             <div>
-                                <h4 className="font-black uppercase tracking-[0.4em] text-[10px] text-yellow-500 mb-8 font-sans">The Shop</h4>
+                                <h4 className="font-black uppercase tracking-[0.4em] text-[10px] text-yellow-500 mb-8 font-sans uppercase">Location</h4>
                                 <div className="flex gap-4 text-slate-400 text-sm font-sans mb-6 italic"><Icon name="MapPin" className="text-yellow-500 shrink-0" size={20}/><span>115 West Main St.<br/>Ardmore, OK 73401</span></div>
                                 <div className="flex gap-4 text-slate-400 text-sm font-sans italic group cursor-pointer text-white"><Icon name="Phone" className="text-yellow-500 shrink-0" size={20}/><span>(580) 223-2233</span></div>
                             </div>
@@ -520,7 +535,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div className="max-w-7xl mx-auto mt-24 pt-10 border-t border-white/5 text-center text-[10px] uppercase font-bold tracking-[0.6em] text-slate-700 italic">© {new Date().getFullYear()} Café Alley Downtown Ardmore • Since 1986</div>
+                        <div className="max-w-7xl mx-auto mt-24 pt-10 border-t border-white/5 text-center text-[10px] uppercase font-bold tracking-[0.6em] text-slate-700 italic font-sans">© {new Date().getFullYear()} Café Alley Downtown Ardmore • Since 1986</div>
                     </footer>
                 </div>
             );
