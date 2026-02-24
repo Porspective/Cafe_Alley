@@ -244,11 +244,11 @@
                     <nav className="bg-black border-b-4 border-yellow-500 sticky top-0 z-50 px-4 py-2 shadow-2xl">
                         <div className="max-w-7xl mx-auto flex items-center justify-between h-20">
                             <div className="flex items-center gap-2 cursor-pointer h-full" onClick={() => setActiveTab('home')}>
-                                {/* Logo Cat - Sits on top of the bottom line of the header */}
+                                {/* Logo Cat - Fixed for PC to perch right on the bottom line */}
                                 <img 
                                     src={CAT_MASCOT} 
                                     alt="Cafe Alley Icon" 
-                                    className="h-32 md:h-40 w-auto object-contain translate-y-[46.5%]" 
+                                    className="h-32 md:h-40 w-auto object-contain translate-y-[10.5%] md:translate-y-[10%]" 
                                 />
                                 <div className="flex flex-col -ml-1 text-white">
                                     <span className="text-xl md:text-2xl font-black tracking-tighter uppercase italic leading-none">Café Alley</span>
@@ -568,7 +568,7 @@
                                 <div className="bg-zinc-950 p-6 border border-yellow-500/20 rounded-3xl group hover:border-yellow-500/50 transition-all text-center">
                                     <p className="text-[10px] text-yellow-500 uppercase tracking-widest font-black mb-2 italic font-sans">Private Parties</p>
                                     <h4 className="font-black uppercase tracking-tighter text-xl mb-2 italic group-hover:text-yellow-500 transition-colors font-serif">Host With Us</h4>
-                                    <div className="flex items-center gap-2 font-sans text-[10px] font-black uppercase text-white hover:text-yellow-500 transition-all cursor-pointer">
+                                    <div className="flex items-center justify-center gap-2 font-sans text-[10px] font-black uppercase text-white hover:text-yellow-500 transition-all cursor-pointer">
                                         Plan Event <Icon name="ChevronRight" size={14}/>
                                     </div>
                                 </div>
@@ -584,5 +584,4 @@
         root.render(<App />);
     </script>
 </body>
-</html>
 </html>
