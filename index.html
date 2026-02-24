@@ -237,18 +237,18 @@
                             backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${BRICK_TEXTURE}')`,
                             backgroundSize: '1000px',
                             backgroundRepeat: 'repeat',
-                            backgroundAttachment: 'fixed'
+                            /* Removed backgroundAttachment: 'fixed' to fix mobile jittering/spazzing */
                         }}
                     />
                     
                     <nav className="bg-black border-b-4 border-yellow-500 sticky top-0 z-50 px-4 py-2 shadow-2xl">
                         <div className="max-w-7xl mx-auto flex items-center justify-between h-20">
                             <div className="flex items-center gap-2 cursor-pointer h-full" onClick={() => setActiveTab('home')}>
-                                {/* Logo Cat - Fixed for PC to perch right on the bottom line */}
+                                {/* Logo Cat - Fixed mobile alignment: shifted further down on mobile to hit the line */}
                                 <img 
                                     src={CAT_MASCOT} 
                                     alt="Cafe Alley Icon" 
-                                    className="h-32 md:h-40 w-auto object-contain translate-y-[10.5%] md:translate-y-[10%]" 
+                                    className="h-32 md:h-40 w-auto object-contain translate-y-[22%] md:translate-y-[10%]" 
                                 />
                                 <div className="flex flex-col -ml-1 text-white">
                                     <span className="text-xl md:text-2xl font-black tracking-tighter uppercase italic leading-none">Café Alley</span>
@@ -515,8 +515,8 @@
                     </main>
 
                     <footer className="bg-black border-t-4 border-yellow-500 pt-32 pb-10 px-4 mt-32 relative shadow-2xl">
-                        {/* Footer Cat - sitting right above the footer border */}
-                        <div className={`absolute z-[60] pointer-events-none select-none top-0 left-1/2 -translate-x-1/2 -translate-y-[70%]`}>
+                        {/* Footer Cat - Raise on PC only by 1% (-70% -> -71%) */}
+                        <div className={`absolute z-[60] pointer-events-none select-none top-0 left-1/2 -translate-x-1/2 -translate-y-[70%] md:-translate-y-[71%]`}>
                             <img 
                                 src={CAT_MASCOT} 
                                 alt="Mascot Cat" 
