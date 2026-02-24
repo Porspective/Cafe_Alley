@@ -29,13 +29,16 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+        html {
+            scroll-behavior: smooth;
+        }
     </style>
 </head>
 <body>
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useMemo } = React;
+        const { useState, useMemo, useEffect } = React;
 
         // Custom Icon components using SVG paths to ensure they render without external library dependencies
         const Icon = ({ name, size = 24, className = "" }) => {
@@ -156,6 +159,7 @@
         const MENU_DATA = [
             {
                 category: "Starters",
+                id: "starters",
                 items: [
                     { id: 's1', name: "Stuffed Poblano", price: 9.00, description: "Jumbo poblano stuffed with pulled chicken, cheese, bell pepper & onions, breaded & flash-fried with chipotle sour cream." },
                     { id: 's2', name: "Dip Trio", price: 10.00, description: "House made pimento cheese served with fresh salsa, guacamole and warm tortilla chips." },
@@ -166,6 +170,7 @@
             },
             {
                 category: "From the Grill",
+                id: "grill",
                 items: [
                     { id: 'g1', name: "Prime New York Strip", price: 32.00, description: "14 oz. steak, lightly seasoned & grilled to your preferred temperature." },
                     { id: 'g2', name: "Rib Eye Steak", price: 29.00, description: "A very tender, flavorful steak grilled to your liking." },
@@ -176,6 +181,7 @@
             },
             {
                 category: "Specialities",
+                id: "specialities",
                 items: [
                     { id: 'sp1', name: "Chicken Fried Steak", price: 15.00, description: "Hand-breaded sirloin, golden-fried & topped with jalapeno gravy. Two sides." },
                     { id: 'sp2', name: "Pollo Pancetta", price: 16.00, description: "Diced chicken, cracked black pepper, pancetta, mushrooms, garlic, Alfredo & penne." },
@@ -186,6 +192,7 @@
             },
             {
                 category: "Burgers",
+                id: "burgers",
                 items: [
                     { id: 'b1', name: "The Southern Favourite", price: 11.00, description: "House pimento cheese, bacon, fried green tomato, lettuce, onion & pickle on brioche. With fries." },
                     { id: 'b2', name: "Alley Burger", price: 11.00, description: "Bacon, Tillamook Cheddar, mayo & a fried egg on a pretzel bun. With fries." },
@@ -196,6 +203,7 @@
             },
             {
                 category: "Signature Drinks",
+                id: "drinks",
                 items: [
                     { id: 'd1', name: "Alley Tea", price: 9.00, description: "Our signature mason jar drink! Vodka, rum, triple sec, gin, Chambord & pineapple juice." },
                     { id: 'd2', name: "Tito's Cranberry Mule", price: 10.00, description: "Tito's Vodka, ginger beer, cranberry juice & fresh lime." },
@@ -208,7 +216,6 @@
             const [activeTab, setActiveTab] = useState('home');
             const [isMenuOpen, setIsMenuOpen] = useState(false);
             const [cart, setCart] = useState([]);
-            const [selectedCategory, setSelectedCategory] = useState("Starters");
             const [orderComplete, setOrderComplete] = useState(false);
 
             const cartCount = useMemo(() => cart.reduce((acc, item) => acc + item.quantity, 0), [cart]);
@@ -229,6 +236,18 @@
                 setCart(prev => prev.map(i => i.id === id ? { ...i, quantity: Math.max(1, i.quantity + delta) } : i));
             };
 
+            const jumpToCategory = (id) => {
+                const element = document.getElementById(`order-sec-${id}`);
+                if (element) {
+                    const navHeight = 100; 
+                    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+                    window.scrollTo({
+                        top: elementPosition - navHeight,
+                        behavior: 'smooth'
+                    });
+                }
+            };
+
             return (
                 <div className="min-h-screen text-slate-100 selection:bg-yellow-500/30">
                     <div 
@@ -237,18 +256,17 @@
                             backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${BRICK_TEXTURE}')`,
                             backgroundSize: '1000px',
                             backgroundRepeat: 'repeat',
-                            /* Removed backgroundAttachment: 'fixed' to fix mobile jittering/spazzing */
                         }}
                     />
                     
                     <nav className="bg-black border-b-4 border-yellow-500 sticky top-0 z-50 px-4 py-2 shadow-2xl">
                         <div className="max-w-7xl mx-auto flex items-center justify-between h-20">
                             <div className="flex items-center gap-2 cursor-pointer h-full" onClick={() => setActiveTab('home')}>
-                                {/* Logo Cat - Fixed mobile alignment: shifted further down on mobile to hit the line */}
+                                {/* Logo Cat - Mobile Raised by 5% (17% vs prev 22%), PC 10% */}
                                 <img 
                                     src={CAT_MASCOT} 
                                     alt="Cafe Alley Icon" 
-                                    className="h-32 md:h-40 w-auto object-contain translate-y-[22%] md:translate-y-[10%]" 
+                                    className="h-32 md:h-40 w-auto object-contain translate-y-[17%] md:translate-y-[10%]" 
                                 />
                                 <div className="flex flex-col -ml-1 text-white">
                                     <span className="text-xl md:text-2xl font-black tracking-tighter uppercase italic leading-none">Café Alley</span>
@@ -272,7 +290,6 @@
                         </div>
                     </nav>
 
-                    {/* Mobile Menu Overlay */}
                     {isMenuOpen && (
                         <div className="fixed inset-0 bg-black/95 z-[100] flex flex-col items-center justify-center gap-10 font-sans animate-in fade-in duration-300">
                             <button onClick={() => setIsMenuOpen(false)} className="absolute top-6 right-6 text-white"><Icon name="X" size={32}/></button>
@@ -289,7 +306,6 @@
                     <main className="max-w-7xl mx-auto">
                         {activeTab === 'home' && (
                             <div className="px-4 py-12 md:py-24 animate-in fade-in duration-700">
-                                {/* Hero Section */}
                                 <div className="grid md:grid-cols-2 gap-12 items-center">
                                     <div className="bg-black/90 p-8 md:p-16 border-l-8 border-yellow-500 shadow-2xl rounded-r-3xl">
                                         <span className="text-yellow-500 font-bold uppercase tracking-[0.4em] mb-4 block text-sm">Since 1986</span>
@@ -312,7 +328,6 @@
                                     </div>
                                 </div>
 
-                                {/* Dynamic Image Gallery Section */}
                                 <div className="mt-32">
                                     <div className="text-center mb-12">
                                         <h2 className="text-4xl md:text-6xl font-black text-white uppercase italic tracking-tighter">Our Favorites</h2>
@@ -333,7 +348,6 @@
                                     </div>
                                 </div>
 
-                                {/* Sister Spots Grid */}
                                 <div className="mt-32 grid grid-cols-1 md:grid-cols-2 gap-8">
                                     <div className="bg-black/90 border-y-4 border-yellow-600 p-12 text-center rounded-3xl shadow-2xl">
                                         <h2 className="text-yellow-500 text-xs font-black uppercase tracking-[0.5em] mb-4 text-center w-full font-sans italic tracking-tighter uppercase">Our Classic Pub</h2>
@@ -392,25 +406,36 @@
                                         <img src={CAT_MASCOT} alt="Order Cat" className="h-20 mx-auto mb-4" />
                                         <p className="text-[10px] font-black text-yellow-500 tracking-widest uppercase font-sans">Direct Pickup Only</p>
                                     </div>
-                                    <div className="flex lg:flex-col gap-2 overflow-x-auto pb-4 lg:pb-0 no-scrollbar">
+                                    <div className="flex lg:flex-col gap-2 overflow-x-auto pb-4 lg:pb-0 no-scrollbar sticky top-28">
                                         {MENU_DATA.map(cat => (
-                                            <button key={cat.category} onClick={() => setSelectedCategory(cat.category)} className={`whitespace-nowrap flex-shrink-0 text-left p-4 uppercase font-black tracking-widest text-[11px] border-r-4 transition-all ${selectedCategory === cat.category ? 'bg-yellow-500 text-black border-black translate-x-1 shadow-lg' : 'bg-black/80 text-slate-400 border-transparent hover:text-white hover:bg-black/95'}`}>
+                                            <button 
+                                                key={cat.category} 
+                                                onClick={() => jumpToCategory(cat.id)} 
+                                                className={`whitespace-nowrap flex-shrink-0 text-left p-4 uppercase font-black tracking-widest text-[11px] border-r-4 transition-all bg-black/80 text-slate-400 border-transparent hover:text-white hover:bg-black/95`}
+                                            >
                                                 {cat.category}
                                             </button>
                                         ))}
                                     </div>
                                 </div>
-                                <div className="flex-1 grid md:grid-cols-2 gap-4 h-fit">
-                                    {MENU_DATA.find(c => c.category === selectedCategory).items.map(item => (
-                                        <div key={item.id} className="bg-black/90 border border-white/5 p-6 flex flex-col justify-between hover:border-yellow-500 transition-all rounded-2xl shadow-xl group">
-                                            <div>
-                                                <div className="flex justify-between items-start mb-4">
-                                                    <h4 className="text-lg font-bold uppercase tracking-tight text-white group-hover:text-yellow-600 font-serif italic">{item.name}</h4>
-                                                    <span className="text-yellow-500 font-sans font-black text-lg">${item.price.toFixed(2)}</span>
-                                                </div>
-                                                <p className="text-slate-400 text-xs font-sans mb-8 leading-relaxed italic opacity-80">{item.description}</p>
+                                <div className="flex-1 space-y-12">
+                                    {MENU_DATA.map(cat => (
+                                        <div key={cat.id} id={`order-sec-${cat.id}`}>
+                                            <h3 className="text-yellow-500 font-black uppercase tracking-[0.3em] text-xs mb-6 px-4">{cat.category}</h3>
+                                            <div className="grid md:grid-cols-2 gap-4">
+                                                {cat.items.map(item => (
+                                                    <div key={item.id} className="bg-black/90 border border-white/5 p-6 flex flex-col justify-between hover:border-yellow-500 transition-all rounded-2xl shadow-xl group">
+                                                        <div>
+                                                            <div className="flex justify-between items-start mb-4">
+                                                                <h4 className="text-lg font-bold uppercase tracking-tight text-white group-hover:text-yellow-600 transition-colors font-serif italic">{item.name}</h4>
+                                                                <span className="text-yellow-500 font-sans font-black text-lg">${item.price.toFixed(2)}</span>
+                                                            </div>
+                                                            <p className="text-slate-400 text-xs font-sans mb-8 leading-relaxed italic opacity-80">{item.description}</p>
+                                                        </div>
+                                                        <button onClick={() => addToCart(item)} className="w-full bg-white text-black py-4 font-black uppercase tracking-widest text-[11px] hover:bg-yellow-500 transition-all rounded-sm active:scale-95 shadow-md">Add to Bag</button>
+                                                    </div>
+                                                ))}
                                             </div>
-                                            <button onClick={() => addToCart(item)} className="w-full bg-white text-black py-4 font-black uppercase tracking-widest text-[11px] hover:bg-yellow-500 transition-all rounded-sm active:scale-95 shadow-md">Add to Bag</button>
                                         </div>
                                     ))}
                                 </div>
@@ -476,7 +501,7 @@
                                                         {cart.map(item => (
                                                             <div key={item.id} className="flex justify-between items-center border-b border-white/5 pb-6">
                                                                 <div>
-                                                                    <span className="font-bold text-xl uppercase leading-none text-white tracking-tight">{item.name}</span>
+                                                                    <span className="font-bold text-xl uppercase leading-none text-white tracking-tight font-serif">{item.name}</span>
                                                                     <p className="text-[10px] text-slate-500 font-sans mt-2 italic uppercase font-bold tracking-widest">Qty: {item.quantity} × ${item.price.toFixed(2)}</p>
                                                                 </div>
                                                                 <span className="font-sans font-black text-yellow-500 text-2xl">${(item.price * item.quantity).toFixed(2)}</span>
@@ -487,7 +512,7 @@
                                                     <div className="bg-white/5 p-8 rounded-3xl space-y-4 font-sans border border-white/10 shadow-inner">
                                                         <div className="flex justify-between text-slate-400 text-sm font-bold uppercase tracking-widest font-sans"><span>Order Subtotal</span><span>${cartTotal.toFixed(2)}</span></div>
                                                         <div className="flex justify-between text-slate-400 text-sm font-bold uppercase tracking-widest font-sans"><span>Ardmore Sales Tax</span><span>${(cartTotal * 0.085).toFixed(2)}</span></div>
-                                                        <div className="flex justify-between text-3xl font-black text-white pt-6 border-t border-white/10 mt-2">
+                                                        <div className="flex justify-between text-3xl font-black text-white pt-6 border-t border-white/10 mt-2 font-serif">
                                                             <span className="uppercase italic tracking-tighter">Total Amount</span>
                                                             <span className="text-yellow-500 underline underline-offset-8 decoration-yellow-500/20 font-sans">${(cartTotal * 1.085).toFixed(2)}</span>
                                                         </div>
@@ -515,8 +540,8 @@
                     </main>
 
                     <footer className="bg-black border-t-4 border-yellow-500 pt-32 pb-10 px-4 mt-32 relative shadow-2xl">
-                        {/* Footer Cat - Raise on PC only by 1% (-70% -> -71%) */}
-                        <div className={`absolute z-[60] pointer-events-none select-none top-0 left-1/2 -translate-x-1/2 -translate-y-[70%] md:-translate-y-[71%]`}>
+                        {/* Footer Cat - Raise on Mobile 0.5% (-70% -> -70.5%), Lower on PC 0.5% (-71% -> -70.5%) */}
+                        <div className={`absolute z-[60] pointer-events-none select-none top-0 left-1/2 -translate-x-1/2 -translate-y-[70.5%]`}>
                             <img 
                                 src={CAT_MASCOT} 
                                 alt="Mascot Cat" 
@@ -544,10 +569,11 @@
                             <div>
                                 <h4 className="font-black uppercase tracking-[0.4em] text-[10px] text-yellow-500 mb-8 uppercase tracking-widest font-sans">Kitchen Hours</h4>
                                 <ul className="text-slate-400 text-sm space-y-3 italic text-xs">
-                                    <li className="flex justify-between border-b border-white/5 pb-2 opacity-30"><span>Monday</span> <span className="font-bold">Closed</span></li>
+                                    {/* Lighter opacity (50%) for closed days for better readability */}
+                                    <li className="flex justify-between border-b border-white/5 pb-2 opacity-50"><span>Monday</span> <span className="font-bold tracking-tighter">Closed</span></li>
                                     <li className="flex justify-between border-b border-white/5 pb-2"><span>Tue - Thu</span> <span className="text-white font-bold font-sans">11am - 9pm</span></li>
                                     <li className="flex justify-between border-b border-white/5 pb-2"><span>Fri - Sat</span> <span className="text-white font-bold font-sans">11am - 10pm</span></li>
-                                    <li className="flex justify-between opacity-30"><span>Sunday</span> <span className="font-bold text-white">Closed</span></li>
+                                    <li className="flex justify-between opacity-50"><span>Sunday</span> <span className="font-bold text-white">Closed</span></li>
                                 </ul>
                             </div>
                             <div className="space-y-4">
