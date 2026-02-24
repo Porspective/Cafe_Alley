@@ -16,6 +16,7 @@
         body {
             font-family: 'Playfair Display', serif;
             background-color: #1a1a1a;
+            overflow-x: hidden; /* Prevents mascot overlap from causing scrollbars */
         }
         .font-sans {
             font-family: 'Source Sans Pro', sans-serif;
@@ -134,22 +135,22 @@
         
         // Asset Filenames
         const LOGO_NAV_TEXT = "cafe%20alleylogo.png";
-        const CAT_MASCOT = "cat_only_precise.png"; // Using the correct precise PNG file
+        const CAT_MASCOT = "cat_only_precise.png";
         const BRICK_TEXTURE = "brick.jpg";
         const HERO_IMAGE = "sam.jpg";
 
         // Gallery Items with Layout Config
         const GALLERY_ITEMS = [
-            { src: "cafe%20alley%20fav1.jpg", className: "md:col-span-2 md:row-span-2" },
-            { src: "cafe%20alley%20fav2.jpg", className: "md:row-span-2" },
+            { src: "cafe%20alley%20fav1.jpg", className: "col-span-2 row-span-2" },
+            { src: "cafe%20alley%20fav2.jpg", className: "row-span-2" },
             { src: "cafe%20alley%20fav3.jpg", className: "" },
             { src: "cafe%20alley%20fav4.jpg", className: "" },
-            { src: "cafe%20alley%20fav5.jpg", className: "md:col-span-2", objectPosition: "top" },
-            { src: "cafe%20alley%20fav6.jpg", className: "md:col-span-2 md:row-span-2" },
+            { src: "cafe%20alley%20fav5.jpg", className: "col-span-2", objectPosition: "top" },
+            { src: "cafe%20alley%20fav6.jpg", className: "col-span-2 row-span-2" },
             { src: "cafe%20alley%20fav7.jpg", className: "" },
-            { src: "cafe%20alley%20fav8.jpg", className: "md:row-span-2" },
+            { src: "cafe%20alley%20fav8.jpg", className: "row-span-2" },
             { src: "cafe%20alley%20fav10.jpg", className: "" }, 
-            { src: "cafe%20alley%20fav9.jpg", className: "md:col-span-2" }
+            { src: "cafe%20alley%20fav9.jpg", className: "col-span-2" }
         ];
 
         const MENU_DATA = [
@@ -203,30 +204,6 @@
             }
         ];
 
-        // Mascot Cat component
-        const MascotCat = ({ className = "", footer = false, headerMascot = false }) => (
-            <div className={`absolute z-[60] pointer-events-none select-none ${className}`}>
-                <img 
-                    src={CAT_MASCOT} 
-                    alt="Mascot Cat" 
-                    className={`${footer ? 'h-40 md:h-72' : headerMascot ? 'h-32 md:h-44' : 'h-16 md:h-20'} w-auto drop-shadow-[0_-5px_15px_rgba(0,0,0,0.8)]`}
-                    style={{ mixBlendMode: 'normal' }}
-                />
-            </div>
-        );
-
-        const BrickBackground = () => (
-            <div 
-                className="fixed inset-0 z-[-1]" 
-                style={{ 
-                    backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${BRICK_TEXTURE}')`,
-                    backgroundSize: '1000px',
-                    backgroundRepeat: 'repeat',
-                    backgroundAttachment: 'fixed'
-                }}
-            />
-        );
-
         const App = () => {
             const [activeTab, setActiveTab] = useState('home');
             const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -254,20 +231,28 @@
 
             return (
                 <div className="min-h-screen text-slate-100 selection:bg-yellow-500/30">
-                    <BrickBackground />
+                    <div 
+                        className="fixed inset-0 z-[-1]" 
+                        style={{ 
+                            backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${BRICK_TEXTURE}')`,
+                            backgroundSize: '1000px',
+                            backgroundRepeat: 'repeat',
+                            backgroundAttachment: 'fixed'
+                        }}
+                    />
                     
-                    <nav className="bg-black border-b-4 border-yellow-500 sticky top-0 z-50 px-4 py-2 shadow-2xl relative">
+                    <nav className="bg-black border-b-4 border-yellow-500 sticky top-0 z-50 px-4 py-2 shadow-2xl">
                         <div className="max-w-7xl mx-auto flex items-center justify-between h-20">
                             <div className="flex items-center gap-2 cursor-pointer h-full" onClick={() => setActiveTab('home')}>
-                                {/* Logo Cat - Raised by 4% of image height from previous 16.5% downward translation = translate-y-[12.5%] */}
+                                {/* Logo Cat - Sits on top of the bottom line of the header */}
                                 <img 
                                     src={CAT_MASCOT} 
                                     alt="Cafe Alley Icon" 
-                                    className="h-40 w-auto object-contain translate-y-[12.5%]" 
+                                    className="h-32 md:h-40 w-auto object-contain translate-y-[46.5%]" 
                                 />
                                 <div className="flex flex-col -ml-1 text-white">
-                                    <span className="text-2xl font-black tracking-tighter uppercase italic leading-none">Café Alley</span>
-                                    <span className="text-[9px] tracking-[0.3em] text-yellow-500 uppercase font-bold">Downtown Ardmore</span>
+                                    <span className="text-xl md:text-2xl font-black tracking-tighter uppercase italic leading-none">Café Alley</span>
+                                    <span className="text-[7px] md:text-[9px] tracking-[0.3em] text-yellow-500 uppercase font-bold">Downtown Ardmore</span>
                                 </div>
                             </div>
 
@@ -287,6 +272,20 @@
                         </div>
                     </nav>
 
+                    {/* Mobile Menu Overlay */}
+                    {isMenuOpen && (
+                        <div className="fixed inset-0 bg-black/95 z-[100] flex flex-col items-center justify-center gap-10 font-sans animate-in fade-in duration-300">
+                            <button onClick={() => setIsMenuOpen(false)} className="absolute top-6 right-6 text-white"><Icon name="X" size={32}/></button>
+                            <button onClick={() => {setActiveTab('home'); setIsMenuOpen(false);}} className="text-3xl font-black uppercase italic tracking-tighter text-white">Home</button>
+                            <button onClick={() => {setActiveTab('menu'); setIsMenuOpen(false);}} className="text-3xl font-black uppercase italic tracking-tighter text-white">Menu</button>
+                            <button onClick={() => {setActiveTab('order'); setIsMenuOpen(false);}} className="text-3xl font-black uppercase italic tracking-tighter text-white">Order Online</button>
+                            <button onClick={() => {setActiveTab('cart'); setIsMenuOpen(false);}} className="bg-yellow-500 text-black px-12 py-4 font-black uppercase tracking-widest flex items-center gap-3">
+                                <Icon name="ShoppingBag" size={24} />
+                                Bag ({cartCount})
+                            </button>
+                        </div>
+                    )}
+
                     <main className="max-w-7xl mx-auto">
                         {activeTab === 'home' && (
                             <div className="px-4 py-12 md:py-24 animate-in fade-in duration-700">
@@ -294,8 +293,12 @@
                                 <div className="grid md:grid-cols-2 gap-12 items-center">
                                     <div className="bg-black/90 p-8 md:p-16 border-l-8 border-yellow-500 shadow-2xl rounded-r-3xl">
                                         <span className="text-yellow-500 font-bold uppercase tracking-[0.4em] mb-4 block text-sm">Since 1986</span>
-                                        <h1 className="text-5xl md:text-7xl font-black text-white mb-6 uppercase leading-none tracking-tighter italic">Ardmore's <br/> <span className="text-yellow-500">Signature</span> Spot</h1>
-                                        <p className="text-lg text-slate-300 mb-10 leading-relaxed font-sans max-w-md italic opacity-90">"A local tradition of fine steaks, specialty desserts, and classic cocktails in the heart of historic downtown."</p>
+                                        <h1 className="text-4xl md:text-7xl font-black text-white mb-6 uppercase leading-none tracking-tighter italic">
+                                            Ardmore's <br/> <span className="text-yellow-500">Timeless</span> Classic
+                                        </h1>
+                                        <p className="text-lg text-slate-300 mb-10 leading-relaxed font-sans max-w-md italic opacity-90">
+                                            "A local tradition of fine steaks, specialty desserts, and classic cocktails in the heart of historic downtown."
+                                        </p>
                                         <div className="flex flex-wrap gap-4 font-sans text-sm md:text-base">
                                             <button onClick={() => setActiveTab('order')} className="bg-yellow-500 text-black px-10 py-4 font-black uppercase tracking-widest transition-all rounded-sm shadow-xl hover:-translate-y-1">Start Order</button>
                                             <button onClick={() => setActiveTab('menu')} className="border-2 border-white text-white px-10 py-4 font-black uppercase tracking-widest transition-all rounded-sm hover:bg-white hover:text-black">View Menu</button>
@@ -309,15 +312,15 @@
                                     </div>
                                 </div>
 
-                                {/* Image Gallery Section */}
+                                {/* Dynamic Image Gallery Section */}
                                 <div className="mt-32">
                                     <div className="text-center mb-12">
                                         <h2 className="text-4xl md:text-6xl font-black text-white uppercase italic tracking-tighter">Our Favorites</h2>
                                         <div className="w-24 h-1 bg-yellow-500 mx-auto mt-6"></div>
                                     </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-4 auto-rows-[200px] md:auto-rows-[250px] gap-4">
+                                    <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[150px] md:auto-rows-[250px] gap-2 md:gap-4">
                                         {GALLERY_ITEMS.map((item, idx) => (
-                                            <div key={idx} className={`group relative overflow-hidden rounded-2xl border-4 border-black shadow-2xl ${item.className}`}>
+                                            <div key={idx} className={`group relative overflow-hidden rounded-xl md:rounded-2xl border-2 md:border-4 border-black shadow-2xl ${item.className}`}>
                                                 <img 
                                                     src={item.src} 
                                                     alt={`Cafe Alley Favorite ${idx + 1}`} 
@@ -353,7 +356,7 @@
                                 <div className="max-w-4xl mx-auto bg-[#fffdfa] text-black p-8 md:p-16 shadow-[0_0_80px_rgba(0,0,0,0.8)] relative border-x-8 border-black">
                                     <div className="absolute top-4 left-4 right-4 bottom-4 border border-black/5 pointer-events-none"></div>
                                     <div className="text-center mb-16 relative">
-                                        <h2 className="text-5xl font-black uppercase tracking-tighter italic leading-none">Café Alley</h2>
+                                        <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter italic leading-none">Café Alley</h2>
                                         <div className="w-24 h-1 bg-yellow-500 mx-auto my-6"></div>
                                         <p className="uppercase tracking-[0.3em] font-bold text-[10px] opacity-60 italic font-sans">Historic Downtown Ardmore • Since 1986</p>
                                     </div>
@@ -361,14 +364,14 @@
                                         <div key={cat.category} className="mb-20">
                                             <div className="flex items-center gap-4 mb-12">
                                                 <div className="h-px bg-slate-200 flex-1"></div>
-                                                <h3 className="text-2xl font-black uppercase tracking-widest text-slate-800 italic">{cat.category}</h3>
+                                                <h3 className="text-xl md:text-2xl font-black uppercase tracking-widest text-slate-800 italic">{cat.category}</h3>
                                                 <div className="h-px bg-slate-200 flex-1"></div>
                                             </div>
                                             <div className="space-y-12">
                                                 {cat.items.map(item => (
                                                     <div key={item.id} className="group">
                                                         <div className="flex justify-between items-baseline mb-2">
-                                                            <h4 className="text-xl font-bold uppercase tracking-tight group-hover:text-yellow-600 transition-colors">{item.name}</h4>
+                                                            <h4 className="text-lg md:text-xl font-bold uppercase tracking-tight group-hover:text-yellow-600 transition-colors">{item.name}</h4>
                                                             <span className="flex-grow border-b border-dotted border-slate-300 mx-4"></span>
                                                             <span className="font-bold font-sans text-lg">${item.price.toFixed(2)}</span>
                                                         </div>
@@ -402,7 +405,7 @@
                                         <div key={item.id} className="bg-black/90 border border-white/5 p-6 flex flex-col justify-between hover:border-yellow-500 transition-all rounded-2xl shadow-xl group">
                                             <div>
                                                 <div className="flex justify-between items-start mb-4">
-                                                    <h4 className="text-lg font-bold uppercase tracking-tight text-white group-hover:text-yellow-600 transition-colors font-serif italic">{item.name}</h4>
+                                                    <h4 className="text-lg font-bold uppercase tracking-tight text-white group-hover:text-yellow-600 font-serif italic">{item.name}</h4>
                                                     <span className="text-yellow-500 font-sans font-black text-lg">${item.price.toFixed(2)}</span>
                                                 </div>
                                                 <p className="text-slate-400 text-xs font-sans mb-8 leading-relaxed italic opacity-80">{item.description}</p>
@@ -473,7 +476,7 @@
                                                         {cart.map(item => (
                                                             <div key={item.id} className="flex justify-between items-center border-b border-white/5 pb-6">
                                                                 <div>
-                                                                    <span className="font-bold text-xl uppercase leading-none text-white tracking-tight font-serif">{item.name}</span>
+                                                                    <span className="font-bold text-xl uppercase leading-none text-white tracking-tight">{item.name}</span>
                                                                     <p className="text-[10px] text-slate-500 font-sans mt-2 italic uppercase font-bold tracking-widest">Qty: {item.quantity} × ${item.price.toFixed(2)}</p>
                                                                 </div>
                                                                 <span className="font-sans font-black text-yellow-500 text-2xl">${(item.price * item.quantity).toFixed(2)}</span>
@@ -484,7 +487,7 @@
                                                     <div className="bg-white/5 p-8 rounded-3xl space-y-4 font-sans border border-white/10 shadow-inner">
                                                         <div className="flex justify-between text-slate-400 text-sm font-bold uppercase tracking-widest font-sans"><span>Order Subtotal</span><span>${cartTotal.toFixed(2)}</span></div>
                                                         <div className="flex justify-between text-slate-400 text-sm font-bold uppercase tracking-widest font-sans"><span>Ardmore Sales Tax</span><span>${(cartTotal * 0.085).toFixed(2)}</span></div>
-                                                        <div className="flex justify-between text-3xl font-black text-white pt-6 border-t border-white/10 mt-2 font-serif">
+                                                        <div className="flex justify-between text-3xl font-black text-white pt-6 border-t border-white/10 mt-2">
                                                             <span className="uppercase italic tracking-tighter">Total Amount</span>
                                                             <span className="text-yellow-500 underline underline-offset-8 decoration-yellow-500/20 font-sans">${(cartTotal * 1.085).toFixed(2)}</span>
                                                         </div>
@@ -511,21 +514,26 @@
                         )}
                     </main>
 
-                    <footer className="bg-black border-t-4 border-yellow-500 pt-32 pb-10 px-4 mt-32 relative overflow-visible shadow-2xl">
-                        {/* Footer Cat - sitting right above the footer border, moved down 2% image height (-72% -> -70%) */}
-                        <MascotCat className="top-0 left-1/2 -translate-x-1/2 -translate-y-[70%]" footer={true} />
+                    <footer className="bg-black border-t-4 border-yellow-500 pt-32 pb-10 px-4 mt-32 relative shadow-2xl">
+                        {/* Footer Cat - sitting right above the footer border */}
+                        <div className={`absolute z-[60] pointer-events-none select-none top-0 left-1/2 -translate-x-1/2 -translate-y-[70%]`}>
+                            <img 
+                                src={CAT_MASCOT} 
+                                alt="Mascot Cat" 
+                                className="h-40 md:h-72 w-auto drop-shadow-[0_-5px_15px_rgba(0,0,0,0.8)]"
+                            />
+                        </div>
                         
                         <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12 relative z-10 text-white font-sans">
                             <div>
-                                {/* Footer logo enlarged 2.5x */}
-                                <div className="flex items-center gap-2 mb-8 h-[200px]">
+                                <div className="flex items-center gap-2 mb-8 h-12 md:h-32">
                                     <img src={LOGO_NAV_TEXT} alt="Footer Logo" className="h-full w-auto object-contain" />
-                                    <h2 className="text-2xl font-black uppercase italic tracking-tighter leading-none font-serif">Café Alley</h2>
+                                    <h2 className="text-xl md:text-2xl font-black uppercase italic tracking-tighter leading-none font-serif">Café Alley</h2>
                                 </div>
                                 <p className="text-slate-400 text-sm leading-relaxed mb-8 italic opacity-80 font-sans">"A Main Street staple in historic downtown Ardmore. Dedicated to fine food, scratch-made desserts, and classic Southern hospitality since 1986."</p>
                                 <div className="flex gap-6">
-                                    <div className="text-slate-400 hover:text-yellow-500 transition-all transform hover:scale-110 cursor-pointer"><Icon name="Facebook" size={24}/></div>
-                                    <div className="text-slate-400 hover:text-yellow-500 transition-all transform hover:scale-110 cursor-pointer"><Icon name="Instagram" size={24}/></div>
+                                    <a href="https://www.facebook.com/p/Cafe-Alley-100050944007395/" target="_blank" className="text-slate-400 hover:text-yellow-500 transition-all transform hover:scale-110 cursor-pointer"><Icon name="Facebook" size={24}/></a>
+                                    <a href="https://www.instagram.com/cafealley1986/?hl=en" target="_blank" className="text-slate-400 hover:text-yellow-500 transition-all transform hover:scale-110 cursor-pointer"><Icon name="Instagram" size={24}/></a>
                                 </div>
                             </div>
                             <div>
@@ -546,14 +554,14 @@
                                 <div className="bg-zinc-950 p-6 border border-yellow-500/20 rounded-3xl group hover:border-yellow-500/50 transition-all text-center">
                                     <p className="text-[10px] text-yellow-500 uppercase tracking-widest font-black mb-2 italic font-sans">Sister Spot</p>
                                     <h4 className="font-black uppercase tracking-tighter text-xl mb-2 italic group-hover:text-yellow-500 transition-colors font-serif">Dew Drop Inn</h4>
-                                    <a href="https://www.facebook.com/DewDropInnArdmore/" target="_blank" className="flex items-center gap-2 font-sans text-[10px] font-black uppercase text-white hover:text-yellow-500 transition-all">
+                                    <a href="https://www.facebook.com/DewDropInnArdmore/" target="_blank" className="flex items-center justify-center gap-2 font-sans text-[10px] font-black uppercase text-white hover:text-yellow-500 transition-all">
                                         Visit Pub <Icon name="ChevronRight" size={14}/>
                                     </a>
                                 </div>
                                 <div className="bg-zinc-950 p-6 border border-yellow-500/20 rounded-3xl group hover:border-yellow-500/50 transition-all text-center">
                                     <p className="text-[10px] text-yellow-500 uppercase tracking-widest font-black mb-2 italic font-sans">Upscale American</p>
                                     <h4 className="font-black uppercase tracking-tighter text-xl mb-2 italic group-hover:text-yellow-500 transition-colors font-serif">The Commodore</h4>
-                                    <a href="https://www.facebook.com/TheCommodoreArdmore/" target="_blank" className="flex items-center gap-2 font-sans text-[10px] font-black uppercase text-white hover:text-yellow-500 transition-all">
+                                    <a href="https://www.facebook.com/TheCommodoreArdmore/" target="_blank" className="flex items-center justify-center gap-2 font-sans text-[10px] font-black uppercase text-white hover:text-yellow-500 transition-all">
                                         Explore More <Icon name="ChevronRight" size={14}/>
                                     </a>
                                 </div>
@@ -576,4 +584,5 @@
         root.render(<App />);
     </script>
 </body>
+</html>
 </html>
