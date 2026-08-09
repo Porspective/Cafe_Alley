@@ -32,6 +32,62 @@
         html {
             scroll-behavior: smooth;
         }
+
+        .restaurant-switcher {
+            align-items: center;
+            background: #101010;
+            border-bottom: 1px solid rgba(234, 179, 8, 0.35);
+            color: #d4d4d4;
+            display: flex;
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            gap: 14px;
+            justify-content: center;
+            letter-spacing: 0.18em;
+            min-height: 38px;
+            overflow-x: auto;
+            padding: 7px 16px;
+            position: relative;
+            text-transform: uppercase;
+            white-space: nowrap;
+            z-index: 160;
+        }
+
+        .restaurant-switcher__label {
+            color: #737373;
+            font-size: 8px;
+            letter-spacing: 0.24em;
+        }
+
+        .restaurant-switcher a,
+        .restaurant-switcher span[aria-current="page"] {
+            border-bottom: 1px solid transparent;
+            padding: 2px 0;
+            transition: color 160ms ease, border-color 160ms ease;
+        }
+
+        .restaurant-switcher a:hover,
+        .restaurant-switcher span[aria-current="page"] {
+            border-bottom-color: #eab308;
+            color: #eab308;
+        }
+
+        .restaurant-switcher__dot {
+            color: #525252;
+        }
+
+        @media (max-width: 560px) {
+            .restaurant-switcher {
+                gap: 9px;
+                justify-content: flex-start;
+                padding-inline: 12px;
+            }
+
+            .restaurant-switcher__label {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -258,6 +314,16 @@
                             backgroundRepeat: 'repeat',
                         }}
                     />
+
+                    <div className="restaurant-switcher" aria-label="Caddo Street restaurants">
+                        <span className="restaurant-switcher__label">Caddo Street Restaurants</span>
+                        <span className="restaurant-switcher__dot" aria-hidden="true">◆</span>
+                        <span aria-current="page">Café Alley</span>
+                        <span className="restaurant-switcher__dot" aria-hidden="true">·</span>
+                        <a href="https://caddo-street-restaurants.porspective.chatgpt.site/the-commodore">The Commodore</a>
+                        <span className="restaurant-switcher__dot" aria-hidden="true">·</span>
+                        <a href="https://caddo-street-restaurants.porspective.chatgpt.site/dew-drop-inn">Dew Drop Inn</a>
+                    </div>
                     
                     {/* sticky Nav z-index increased to ensure mascots from footer don't overlap it */}
                     <nav className="bg-black border-b-4 border-yellow-500 sticky top-0 z-[150] px-4 py-2 shadow-2xl">
